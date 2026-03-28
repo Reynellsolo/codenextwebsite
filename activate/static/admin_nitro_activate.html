@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro активация</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,sans-serif;background:#1a1a2e;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+        .box{background:#16213e;border-radius:12px;padding:30px;max-width:500px;width:100%;color:#fff}
+        h1{margin-bottom:20px;color:#e94560}
+        input,textarea{width:100%;padding:12px;margin-bottom:15px;border:none;border-radius:6px;background:#0f3460;color:#fff;font-size:14px}
+        textarea{min-height:120px;font-family:monospace}
+        button{width:100%;padding:14px;background:#e94560;color:#fff;border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer}
+        button:disabled{background:#555;cursor:not-allowed}
+        button.stop{background:#dc3545;margin-top:10px}
+        #status{margin-top:20px;padding:15px;border-radius:6px;display:none}
+        #status.show{display:block}
+        #status.running{background:#0f3460;border:2px solid #e94560}
+        #status.success{background:#1b4332;border:2px solid #40916c}
+        #status.error{background:#461220;border:2px solid #e94560}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🚀 Nitro активация</h1>
+        <input type="text" id="cdk" placeholder="CDK код">
+        <textarea id="auth" placeholder='{"accessToken":"...","sessionToken":"..."}'></textarea>
+        <button id="btn" onclick="start()">Активировать</button>
+        <button id="stop-btn" class="stop" style="display:none" onclick="stop()">Остановить</button>
+        <div id="status"></div>
+    </div>
+<script>
+let isRunning = false;
+
+async function start() {
+    const cdk = document.getElementById("cdk").value.trim();
+    const auth = document.getElementById("auth").value.trim();
+    
+    if (!cdk || !auth) {
+        alert("Заполни оба поля!");
+        return;
+    }
+    
+    try {
+        JSON.parse(auth);
+    } catch(e) {
+        alert("Неверный JSON!");
+        return;
+    }
+    
+    isRunning = true;
+    document.getElementById("btn").style.display = "none";
+    document.getElementById("stop-btn").style.display = "block";
+    
+    const status = document.getElementById("status");
+    status.className = "show running";
+    
+    let attempt = 0;
+    
+    // БЕСКОНЕЧНЫЙ ЦИКЛ - НЕ ОСТАНАВЛИВАЕТСЯ НИ ПРИ КАКИХ ОШИБКАХ
+    while (isRunning) {
+        attempt++;
+        status.textContent = `⏳ Попытка ${attempt}...`;
+        
+        try {
+            const response = await fetch("/admin/nitro-proxy", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({cdk: cdk, auth_json: auth})
+            });
+            
+            const result = await response.json();
+            
+            // ✅ ТОЛЬКО УСПЕХ ОСТАНАВЛИВАЕТ ЦИКЛ
+            if (result.success) {
+                status.className = "show success";
+                status.textContent = `✅ Успех! (${attempt} попыток)`;
+                isRunning = false;
+                document.getElementById("stop-btn").style.display = "none";
+                document.getElementById("btn").style.display = "block";
+                break;
+            }
+            
+            const err = (result.error || "").toLowerCase();
+            
+            // ✅ CDK уже использован = успех
+            if (err.includes("already used") || err.includes("已使用")) {
+                status.className = "show success";
+                status.textContent = `✅ CDK уже активирован (${attempt} попыток)`;
+                isRunning = false;
+                document.getElementById("stop-btn").style.display = "none";
+                document.getElementById("btn").style.display = "block";
+                break;
+            }
+            
+            // ВСЕ ОСТАЛЬНЫЕ ОШИБКИ - ПРОСТО ПОКАЗЫВАЕМ И ПОВТОРЯЕМ
+            status.className = "show running";
+            status.innerHTML = `⏳ Попытка ${attempt}<br>Ошибка: ${result.error || "неизвестно"}<br><small>Повтор через 5 сек...</small>`;
+            
+            await sleep(3000); // всегда 3 секунд между попытками
+            
+        } catch(e) {
+            status.className = "show running";
+            status.innerHTML = `⏳ Попытка ${attempt}<br>Ошибка сети: ${e.message}<br><small>Повтор через 5 сек...</small>`;
+            await sleep(3000);
+        }
+    }
+}
+
+function stop() {
+    isRunning = false;
+    document.getElementById("status").className = "show error";
+    document.getElementById("status").textContent = "🛑 Остановлено вручную";
+    document.getElementById("stop-btn").style.display = "none";
+    document.getElementById("btn").style.display = "block";
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+</script>
+</body>
+</html>

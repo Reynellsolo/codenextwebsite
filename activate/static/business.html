@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatGPT Business — заявка</title>
+  <style>
+    :root{--bg:#050508;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.14);--text:#fff;--muted:rgba(255,255,255,.65);--accent:#818cf8;--accent2:#a78bfa}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{width:100%;max-width:640px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px}
+    h1{margin:0 0 12px;font-size:30px}
+    p{margin:0 0 18px;color:var(--muted);line-height:1.6}
+    label{display:block;margin:14px 0 8px;font-weight:600}
+    input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text);font-size:16px}
+    button{margin-top:18px;width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+    button:disabled{opacity:.65;cursor:not-allowed}
+    .ok,.err{display:none;margin-top:18px;padding:14px;border-radius:12px;line-height:1.5}
+    .ok{background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.35)}
+    .err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35)}
+    .support{margin-top:16px;display:inline-block;color:#fff;text-decoration:none;border:1px solid var(--border);padding:10px 14px;border-radius:10px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>ChatGPT Business — 1 месяц</h1>
+    <p>Введите email, привязанный к вашему ChatGPT. После отправки заявка уходит в ручную обработку.</p>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+    <button id="sendBtn" onclick="submitRequest()">Отправить заявку</button>
+
+    <div class="ok" id="okMsg"></div>
+    <div class="err" id="errMsg"></div>
+
+    <a class="support" href="https://t.me/CodeNext_support" target="_blank" rel="noopener noreferrer">💬 Помощь</a>
+  </div>
+
+  <script>
+    let csrfToken = '';
+    (async function initCsrf(){
+      try{
+        const r = await fetch('/cabinet/csrf-token',{credentials:'include'});
+        const d = await r.json();
+        csrfToken = d.csrf_token || '';
+      }catch(e){ console.warn('csrf init failed', e); }
+    })();
+
+    function tokenFromPath(){
+      const parts = window.location.pathname.split('/').filter(Boolean);
+      return parts[parts.length - 1] || '';
+    }
+
+    async function submitRequest(){
+      const btn = document.getElementById('sendBtn');
+      const email = document.getElementById('email').value.trim();
+      const ok = document.getElementById('okMsg');
+      const err = document.getElementById('errMsg');
+      ok.style.display = 'none';
+      err.style.display = 'none';
+
+      if(!email){
+        err.textContent = 'Введите email.';
+        err.style.display = 'block';
+        return;
+      }
+      if(!csrfToken){
+        err.textContent = 'Не удалось инициализировать защиту. Обновите страницу.';
+        err.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Отправляем...';
+      try{
+        const r = await fetch('/submit-business-request',{
+          method:'POST',
+          credentials:'include',
+          headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken},
+          body:JSON.stringify({token: tokenFromPath(), email})
+        });
+        const d = await r.json().catch(()=>({}));
+        if(!r.ok || d.status !== 'ok') throw new Error(d.error || 'Не удалось отправить заявку');
+        ok.textContent = d.message || 'Ваша заявка попала на ручную обработку. Как только приглашение будет отправлено, вы получите уведомление на вашу почту, привязанную к ChatGPT.';
+        ok.style.display = 'block';
+      }catch(e){
+        err.textContent = e.message || 'Ошибка соединения. Попробуйте позже.';
+        err.style.display = 'block';
+      }finally{
+        btn.disabled = false;
+        btn.textContent = 'Отправить заявку';
+      }
+    }
+  </script>
+</body>
+</html>

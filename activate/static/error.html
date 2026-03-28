@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Ошибка — CodeNext</title>
+  
+  <!-- ===== FAVICONS ===== -->
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+
+  <!-- ===== FONTS ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+
+  <!-- АВТОВЫБОР ТЕМЫ -->
+  <script>
+    (function(){
+      const saved = localStorage.getItem('theme');
+      const sys = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if(saved === 'light' || (!saved && sys)){
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  
+  <style>
+    @font-face {
+      font-family: 'Inter'; font-style: normal; font-weight: 400 900; font-display: swap;
+      src: local('Inter'), local('Inter-Regular'); size-adjust: 100%; ascent-override: 90%;
+    }
+    :root {
+      --bg: #050508;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.1);
+      --card-border-hover: rgba(255,255,255,0.2);
+      --text: #ffffff;
+      --text-secondary: #e4e4e7;
+      --muted: rgba(255,255,255,0.6);
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --accent-rgb: 129,140,248;
+      --accent-light: rgba(129,140,248,0.15);
+      --accent-glow: rgba(129,140,248,0.5);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --yellow: #fbbf24;
+      --yellow-rgb: 251,191,36;
+      --yellow-light: rgba(251,191,36,0.15);
+      --yellow-glow: rgba(251,191,36,0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --card: rgba(255,255,255,0.9);
+      --card-hover: rgba(255,255,255,1);
+      --card-border: rgba(0,0,0,0.1);
+      --card-border-hover: rgba(0,0,0,0.15);
+      --text: #1a1a1a;
+      --text-secondary: #2d2d2d;
+      --muted: #555555;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-rgb: 99,102,241;
+      --accent-light: rgba(99,102,241,0.12);
+      --accent-glow: rgba(99,102,241,0.4);
+      --green: #059669;
+      --green-rgb: 5,150,105;
+      --yellow: #d97706;
+      --yellow-rgb: 217,119,6;
+      --yellow-light: rgba(217,119,6,0.1);
+      --yellow-glow: rgba(217,119,6,0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.3s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--yellow-rgb), 0.2), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 90% 50%, rgba(var(--accent-rgb), 0.1), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 10% 80%, rgba(var(--accent-rgb), 0.08), transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite alternate;
+    }
+
+    [data-theme="light"] body::before { opacity: 0.5; }
+
+    @keyframes bgPulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .orb-1 { width: 500px; height: 500px; background: rgba(var(--yellow-rgb), 0.12); top: -150px; left: -150px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(var(--accent-rgb), 0.1); top: 50%; right: -150px; animation-delay: -5s; }
+    .orb-3 { width: 350px; height: 350px; background: rgba(var(--accent-rgb), 0.08); bottom: -100px; left: 30%; animation-delay: -10s; }
+
+    [data-theme="light"] .orb { opacity: 0.4; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, 30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(0.95); }
+      75% { transform: translate(40px, -20px) scale(1.02); }
+    }
+
+    .particles { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(var(--accent-rgb), 0.6);
+      border-radius: 50%;
+      animation: particleFloat 20s linear infinite;
+      box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
+    }
+
+    [data-theme="light"] .particle { opacity: 0.5; }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      margin-bottom: 48px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 0 40px var(--accent-glow);
+      position: relative;
+      animation: logoPulse 3s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover { transform: scale(1.1) rotate(-5deg); }
+
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 40px var(--accent-glow); }
+      50% { box-shadow: 0 0 60px var(--accent-glow), 0 0 100px rgba(var(--accent-rgb), 0.4); }
+    }
+
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent 60%);
+    }
+
+    .logo span { position: relative; z-index: 1; font-family: monospace; }
+
+    .brand-title .name { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+    .brand-title .tag { font-size: 13px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+
+    .top-actions { display: flex; gap: 12px; align-items: center; }
+
+    .theme-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    [data-theme="light"] .theme-btn { background: #fff; }
+
+    .theme-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: scale(1.15) rotate(180deg);
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 56px 48px;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    [data-theme="light"] .card {
+      background: #fff;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+    }
+
+    .card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+    }
+
+    .icon {
+      font-size: 80px;
+      margin-bottom: 28px;
+      display: block;
+      animation: wobble 1s ease, iconPulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 40px var(--yellow-glow));
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(0deg); }
+      15% { transform: rotate(-15deg); }
+      30% { transform: rotate(10deg); }
+      45% { transform: rotate(-10deg); }
+      60% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { filter: drop-shadow(0 0 40px var(--yellow-glow)); }
+      50% { filter: drop-shadow(0 0 60px var(--yellow-glow)); }
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .warn-box {
+      border: 1px solid rgba(var(--yellow-rgb), 0.3);
+      background: var(--yellow-light);
+      color: var(--yellow);
+      padding: 24px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 36px;
+      box-shadow: 0 0 30px rgba(var(--yellow-rgb), 0.1);
+      animation: warnPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes warnPulse {
+      0%, 100% { box-shadow: 0 0 30px rgba(var(--yellow-rgb), 0.1); }
+      50% { box-shadow: 0 0 50px rgba(var(--yellow-rgb), 0.2); }
+    }
+
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 18px 32px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 40px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover::before { left: 100%; }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 20px 60px var(--accent-glow); }
+
+    .btn-dark {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      box-shadow: none;
+      color: var(--text);
+    }
+
+    [data-theme="light"] .btn-dark { background: #f8f8fc; }
+
+    .btn-dark:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .btn-dark::before { display: none; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 48px 0;
+      border-top: 1px solid var(--card-border);
+      margin-top: 48px;
+    }
+
+    footer .copy { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+
+    .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); font-size: 14px; font-weight: 500; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .topbar { animation: fadeUp 0.5s ease both; }
+    .card { animation: fadeUp 0.6s ease 0.1s both; }
+
+    /* ===== MOBILE OPTIMIZATION ===== */
+    @media (max-width: 768px) {
+      .container { padding: 20px 16px 60px; }
+      .topbar { flex-direction: column; gap: 16px; text-align: center; }
+      .card { padding: 40px 28px; }
+      h1 { font-size: 28px; }
+      .sub { font-size: 16px; }
+      .btn { width: 100%; text-align: center; justify-content: center; }
+      .footer-links { gap: 20px; }
+      
+      /* Disable heavy animations */
+      .orb, .particles { display: none !important; }
+      .topbar, .card { animation: none !important; opacity: 1 !important; transform: none !important; }
+      body::before { animation: none !important; background-attachment: scroll; }
+      .icon { animation: none !important; }
+      .warn-box { animation: none !important; }
+    }
+
+    @media (max-width: 380px) {
+      .card { padding: 32px 20px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <nav class="topbar">
+      <a href="/" class="brand">
+        <div class="logo"><span>&lt;/&gt;</span></div>
+        <div class="brand-title">
+          <div class="name">CodeNext</div>
+          <div class="tag">Премиум подписки ChatGPT</div>
+        </div>
+      </a>
+      <div class="top-actions">
+        <button class="theme-btn" id="themeToggle" title="Сменить тему">🌙</button>
+      </div>
+    </nav>
+
+    <div class="card">
+      <span class="icon">⚠️</span>
+      <h1>Что-то пошло не так</h1>
+      <p class="sub">Ссылка недействительна или произошла ошибка. Попробуйте позже или обратитесь в поддержку.</p>
+      <div class="warn-box">💡 Если ошибка повторяется — напишите в поддержку, мы разберёмся</div>
+      <div class="row">
+        <a class="btn" href="https://t.me/CodeNext_support" target="_blank">💬 Написать в поддержку</a>
+        <a class="btn btn-dark" href="/">На главную</a>
+      </div>
+    </div>
+
+    <footer>
+      <div class="copy">© 2026 CodeNext. Все права защищены.</div>
+      <div class="footer-links">
+        <a href="/refund">Возврат средств</a>
+        <a href="/privacy">Конфиденциальность</a>
+        <a href="/offer">Оферта</a>
+        <a href="https://t.me/CodeNext_support" target="_blank">Поддержка</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Particles (Desktop Only)
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) {
+      const particlesEl = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 20 + 's';
+        p.style.animationDuration = (15 + Math.random() * 15) + 's';
+        p.style.width = (2 + Math.random() * 3) + 'px';
+        p.style.height = p.style.width;
+        particlesEl.appendChild(p);
+      }
+    }
+
+    // Theme Toggle
+    const themeBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    function updateIcon() {
+      themeBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updateIcon();
+    themeBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
+  </script>
+</body>
+</html>

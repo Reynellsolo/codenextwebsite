@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Активация подписки — CodeNext</title>
+  
+  <!-- ===== FAVICONS ===== -->
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+  
+  <!-- ===== FONTS (OPTIMIZED) ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+  
+  <!-- АВТОВЫБОР ТЕМЫ -->
+  <script>
+    (function(){
+      const saved = localStorage.getItem('theme');
+      const sys = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if(saved === 'light' || (!saved && sys)){
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  
+  <style>
+    /* ФИКС CLS */
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+      src: local('Inter'), local('Inter-Regular');
+      size-adjust: 100%;
+      ascent-override: 90%;
+    }
+    
+    :root{--bg:#050508;--bg-secondary:#0a0a0f;--card:rgba(255,255,255,0.04);--card-hover:rgba(255,255,255,0.08);--card-border:rgba(255,255,255,0.1);--card-border-hover:rgba(255,255,255,0.2);--text:#fff;--text-secondary:#e4e4e7;--muted:rgba(255,255,255,0.6);--accent:#818cf8;--accent2:#a78bfa;--accent-rgb:129,140,248;--accent-light:rgba(129,140,248,0.15);--accent-glow:rgba(129,140,248,0.5);--green:#34d399;--green-rgb:52,211,153;--green-light:rgba(52,211,153,0.15);--red:#f87171;--red-rgb:248,113,113}
+    
+    [data-theme="light"]{--bg:#f5f5f7;--bg-secondary:#fff;--card:rgba(255,255,255,0.9);--card-hover:#fff;--card-border:rgba(0,0,0,0.1);--card-border-hover:rgba(0,0,0,0.15);--text:#1a1a1a;--text-secondary:#2d2d2d;--muted:#555;--accent:#6366f1;--accent2:#8b5cf6;--accent-rgb:99,102,241;--accent-light:rgba(99,102,241,0.12);--accent-glow:rgba(99,102,241,0.4);--green:#059669;--green-rgb:5,150,105;--green-light:rgba(5,150,105,0.12);--red:#dc2626;--red-rgb:220,38,38}
+    
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.6;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .5s ease,color .3s ease}
+    
+    body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 120% 80% at 50% -20%,rgba(var(--accent-rgb),.3),transparent 50%),radial-gradient(ellipse 80% 60% at 90% 50%,rgba(167,139,250,.15),transparent 50%),radial-gradient(ellipse 80% 60% at 10% 80%,rgba(var(--green-rgb),.1),transparent 50%);animation:bgPulse 10s ease-in-out infinite alternate}
+    [data-theme="light"] body::before{opacity:.5}
+    @keyframes bgPulse{0%{opacity:1;transform:scale(1)}100%{opacity:.8;transform:scale(1.05)}}
+    
+    /* Orbs */
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:-1;animation:orbFloat 20s ease-in-out infinite;pointer-events:none}
+    .orb-1{width:600px;height:600px;background:rgba(var(--accent-rgb),.15);top:-200px;left:-200px}
+    .orb-2{width:500px;height:500px;background:rgba(167,139,250,.1);top:50%;right:-200px;animation-delay:-5s}
+    .orb-3{width:400px;height:400px;background:rgba(var(--green-rgb),.1);bottom:-100px;left:30%;animation-delay:-10s}
+    [data-theme="light"] .orb{opacity:.4}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,30px) scale(1.05)}50%{transform:translate(-20px,50px) scale(.95)}75%{transform:translate(40px,-20px) scale(1.02)}}
+    
+    /* Particles */
+    .particles{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+    .particle{position:absolute;width:3px;height:3px;background:rgba(var(--accent-rgb),.6);border-radius:50%;animation:particleFloat 20s linear infinite;box-shadow:0 0 10px rgba(var(--accent-rgb),.3)}
+    [data-theme="light"] .particle{opacity:.5}
+    @keyframes particleFloat{0%{transform:translateY(100vh);opacity:0}10%,90%{opacity:1}100%{transform:translateY(-100vh);opacity:0}}
+    
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1000px;margin:0 auto;padding:32px 24px 80px}
+    
+    /* Topbar */
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 0;margin-bottom:48px}
+    .brand{display:flex;align-items:center;gap:14px;cursor:pointer;text-decoration:none}
+    .logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;box-shadow:0 0 40px var(--accent-glow);position:relative;animation:logoPulse 3s ease-in-out infinite;transition:transform .3s ease}
+    .logo:hover{transform:scale(1.1) rotate(-5deg)}
+    @keyframes logoPulse{0%,100%{box-shadow:0 0 40px var(--accent-glow)}50%{box-shadow:0 0 60px var(--accent-glow),0 0 100px rgba(var(--accent-rgb),.4)}}
+    .logo::before{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 60%)}
+    .logo span{position:relative;z-index:1;font-family:monospace}
+    .brand-title .name{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px}
+    .brand-title .tag{font-size:13px;color:var(--muted);font-weight:500;margin-top:2px}
+    .top-actions{display:flex;gap:12px;align-items:center}
+    .pill{padding:12px 20px;background:var(--card);border:1px solid var(--card-border);border-radius:100px;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s ease;text-decoration:none}
+    [data-theme="light"] .pill{background:#fff}
+    .pill:hover{background:var(--card-hover);border-color:var(--accent);color:var(--text);transform:translateY(-2px)}
+    .theme-btn{width:48px;height:48px;border-radius:50%;background:var(--card);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;transition:all .4s cubic-bezier(.175,.885,.32,1.275)}
+    [data-theme="light"] .theme-btn{background:#fff}
+    .theme-btn:hover{background:var(--accent-light);border-color:var(--accent);transform:scale(1.15) rotate(180deg);box-shadow:0 0 30px var(--accent-glow)}
+    
+    /* Page Header */
+    .page-header{text-align:center;margin-bottom:56px}
+    .page-header h1{font-size:clamp(32px,6vw,52px);font-weight:900;letter-spacing:-2px;margin-bottom:16px;color:var(--text)}
+    .page-header h1 .gradient{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--green),var(--accent));background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientFlow 4s linear infinite}
+    @keyframes gradientFlow{0%{background-position:0% center}100%{background-position:300% center}}
+    .page-header p{font-size:18px;color:var(--muted);max-width:480px;margin:0 auto}
+    
+    /* Steps Section */
+    .steps-section{background:var(--card);border:1px solid var(--card-border);border-radius:28px;padding:40px;margin-bottom:32px;transition:all .4s ease}
+    [data-theme="light"] .steps-section{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+    .steps-section:hover{border-color:var(--card-border-hover)}
+    .steps-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:28px}
+    .steps-section h2{font-size:24px;font-weight:800;letter-spacing:-.5px;color:var(--text);display:flex;align-items:center;gap:16px}
+    .steps-section h2::before{content:"";width:5px;height:28px;border-radius:3px;background:linear-gradient(180deg,var(--accent),var(--accent2))}
+    
+    /* Device Toggle */
+    .device-toggle{display:flex;background:var(--card-hover);border-radius:12px;padding:4px;gap:4px}
+    [data-theme="light"] .device-toggle{background:#f0f0f5}
+    .device-btn{padding:10px 20px;border:none;background:transparent;border-radius:10px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .3s ease;display:flex;align-items:center;gap:8px}
+    .device-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 15px var(--accent-glow)}
+    .device-btn:hover:not(.active){background:var(--card);color:var(--text)}
+    
+    /* Steps Grid */
+    .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+    .step{background:var(--card-hover);border:1px solid var(--card-border);border-radius:20px;padding:24px;transition:all .4s ease;position:relative;overflow:hidden}
+    [data-theme="light"] .step{background:#f8f8fc}
+    .step::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.1),transparent);transition:left .7s ease}
+    .step:hover::before{left:100%}
+    .step:hover{border-color:var(--accent);background:var(--accent-light);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.1),0 0 30px var(--accent-glow)}
+    .step .num{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 24px var(--accent-glow);transition:transform .3s ease}
+    .step:hover .num{transform:scale(1.1) rotate(-5deg)}
+    .step .title{font-size:17px;font-weight:700;margin-bottom:8px;color:var(--text)}
+    .step .desc{font-size:14px;color:var(--muted);line-height:1.6}
+    
+    .mono-link{font-family:'SF Mono',ui-monospace,Consolas,monospace;font-size:12px;color:var(--accent);border-bottom:1px dashed rgba(var(--accent-rgb),.4);word-break:break-all}
+    .mono-link:hover{color:var(--text)}
+    .text-link{color:var(--accent);border-bottom:1px dashed rgba(var(--accent-rgb),.4);transition:all .2s}
+    .text-link:hover{color:var(--text);border-color:var(--text)}
+    
+    /* Instruction Content */
+    .instruction-content{display:none}
+    .instruction-content.active{display:block}
+    
+    /* Form Section */
+    .form-section{background:var(--card);border:1px solid var(--card-border);border-radius:28px;padding:40px;transition:all .4s ease}
+    [data-theme="light"] .form-section{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+    .form-section:hover{border-color:var(--card-border-hover)}
+    .form-section h2{font-size:24px;font-weight:800;margin-bottom:12px;letter-spacing:-.5px;color:var(--text);display:flex;align-items:center;gap:16px}
+    .form-section h2::before{content:"";width:5px;height:28px;border-radius:3px;background:linear-gradient(180deg,var(--green),#6ee7b7)}
+    .form-section .muted-text{color:var(--muted);font-size:15px;margin-bottom:24px;max-width:600px}
+    .form-grid{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+    
+    textarea{width:100%;min-height:180px;resize:vertical;padding:20px;background:var(--card-hover);border:2px solid var(--card-border);border-radius:18px;font-family:'SF Mono',ui-monospace,Consolas,monospace;font-size:13px;line-height:1.6;color:var(--text);outline:0;transition:all .3s ease}
+    [data-theme="light"] textarea{background:#f8f8fc}
+    textarea::placeholder{color:var(--muted);opacity:.6}
+    textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-light),0 0 30px rgba(var(--accent-rgb),.15);background:var(--card)}
+    [data-theme="light"] textarea:focus{background:#fff}
+    
+    .form-actions{display:flex;flex-direction:column;gap:12px;min-width:200px}
+    .btn{padding:18px 28px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;font-weight:700;border:none;border-radius:16px;cursor:pointer;transition:all .3s ease;box-shadow:0 10px 40px var(--accent-glow);position:relative;overflow:hidden;white-space:nowrap}
+    .btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .6s ease}
+    .btn:hover::before{left:100%}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 20px 60px var(--accent-glow)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+    .btn-dark{background:var(--card);border:1px solid var(--card-border);box-shadow:none;color:var(--text)}
+    [data-theme="light"] .btn-dark{background:#f8f8fc}
+    .btn-dark:hover{background:var(--card-hover);border-color:var(--accent);box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+    .btn-dark::before{display:none}
+    .hint{font-size:13px;color:var(--muted);line-height:1.5;text-align:center}
+    
+    .status{margin-top:24px;padding:20px 24px;border-radius:18px;border:1px solid var(--card-border);font-size:15px;font-weight:600;display:none;animation:fadeUp .3s ease}
+    .status.ok{display:block;border-color:rgba(var(--green-rgb),.4);background:var(--green-light);color:var(--green);box-shadow:0 0 30px rgba(var(--green-rgb),.15)}
+    .status.err{display:block;border-color:rgba(var(--red-rgb),.4);background:rgba(var(--red-rgb),.1);color:var(--red)}
+    .status.wait{display:block;border-color:rgba(var(--accent-rgb),.4);background:var(--accent-light);color:var(--accent)}
+    
+    .note{margin-top:24px;font-size:14px;color:var(--muted);padding:18px 24px;background:var(--card-hover);border:1px solid var(--card-border);border-radius:16px;display:flex;align-items:center;gap:12px}
+    [data-theme="light"] .note{background:#f8f8fc}
+    .note-icon{font-size:24px;flex-shrink:0}
+    
+    /* Footer */
+    footer{text-align:center;padding:48px 0;border-top:1px solid var(--card-border);margin-top:48px}
+    footer .copy{color:var(--muted);font-size:14px;margin-bottom:20px}
+    .footer-links{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+    .footer-links a{color:var(--muted);font-size:14px;font-weight:500;transition:color .3s;text-decoration:none}
+    .footer-links a:hover{color:var(--accent)}
+    
+    .spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    
+    /* Animations */
+    .topbar{animation:fadeUp .5s ease both}
+    .page-header{animation:fadeUp .6s ease .1s both}
+    .steps-section{animation:fadeUp .6s ease .2s both}
+    .form-section{animation:fadeUp .6s ease .3s both}
+    
+    /* ===== МОБИЛЬНОЕ УСКОРЕНИЕ (LCP FIX) ===== */
+    .steps-section, .form-section, footer {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 800px;
+    }
+    
+    @media (max-width:900px){
+      .steps-grid{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
+      .form-actions{flex-direction:row;flex-wrap:wrap;min-width:auto}
+      .form-actions .btn{flex:1;min-width:150px}
+    }
+    
+    @media (max-width:768px){
+      .container{padding:20px 16px 60px}
+      .topbar{flex-direction:column;gap:16px;text-align:center}
+      .top-actions{width:100%;justify-content:center}
+      .steps-header{flex-direction:column;align-items:stretch}
+      .device-toggle{justify-content:center}
+      .steps-section,.form-section{padding:28px 24px}
+      .page-header h1{font-size:28px}
+      .footer-links{gap:20px}
+      
+      /* MOBILE PERF */
+      .topbar, .page-header, .steps-section, .form-section {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      body::before {
+        animation: none !important;
+        background: radial-gradient(circle at 50% 20%, rgba(129,140,248,.15), transparent 70%);
+      }
+      .orb, .particles {
+        display: none !important;
+      }
+      .step:hover {
+        transform: none !important;
+      }
+    }
+    
+    @media (max-width:380px){
+      .page-header h1{font-size:24px}
+      .steps-section,.form-section{padding:24px 20px}
+    }
+    
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+      select, textarea, input {
+        font-size: 16px !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <nav class="topbar">
+      <a href="/" class="brand">
+        <div class="logo"><span>&lt;/&gt;</span></div>
+        <div class="brand-title">
+          <div class="name">CodeNext</div>
+          <div class="tag">Премиум подписки ChatGPT</div>
+        </div>
+      </a>
+      <div class="top-actions">
+        <a class="pill" href="https://t.me/CodeNext_support" target="_blank">💬 Поддержка</a>
+        <button class="theme-btn" id="themeToggle" title="Сменить тему">🌙</button>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <h1>Подключение <span class="gradient">подписки</span></h1>
+      <p>Процесс займёт пару минут. Поддержка всегда на связи.</p>
+    </div>
+
+    <!-- ===== ИНСТРУКЦИЯ ===== -->
+    <div class="steps-section">
+      <div class="steps-header">
+        <h2>Инструкция</h2>
+        
+        <!-- Переключатель устройств -->
+        <div class="device-toggle">
+          <button class="device-btn active" data-device="desktop">
+            💻 Компьютер
+          </button>
+          <button class="device-btn" data-device="mobile">
+            📱 Телефон
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== ИНСТРУКЦИЯ ДЛЯ КОМПЬЮТЕРА ===== -->
+      <div class="instruction-content active" id="desktop-instruction">
+        <div class="steps-grid">
+          <div class="step">
+            <div class="num">1</div>
+            <div class="title">Войдите в ChatGPT</div>
+            <p class="desc">Откройте браузер <b>Chrome</b>, <b>Яндекс Браузер</b> или <b>Brave</b> и войдите в свой аккаунт <a class="text-link" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT</a>.</p>
+          </div>
+          
+          <div class="step">
+            <div class="num">2</div>
+            <div class="title">Перейдите по ссылке</div>
+            <p class="desc">Кликните на ссылку ниже (откроется в новой вкладке):</p>
+            <p style="margin-top:12px">
+              <a class="mono-link" href="https://chatgpt.com/api/auth/session" target="_blank" rel="noopener">
+                chatgpt.com/api/auth/session
+              </a>
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="num">3</div>
+            <div class="title">Скопируйте весь текст</div>
+            <p class="desc">Нажмите <b>Ctrl+A</b> (выделить всё), затем <b>Ctrl+C</b> (скопировать). Вставьте в поле ниже.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ИНСТРУКЦИЯ ДЛЯ ТЕЛЕФОНА ===== -->
+      <div class="instruction-content" id="mobile-instruction">
+        <div class="steps-grid">
+          <div class="step">
+            <div class="num">1</div>
+            <div class="title">Откройте браузер</div>
+            <p class="desc">Используйте <b>Safari</b>, <b>Chrome</b> или <b>Яндекс Браузер</b>. <span style="color:var(--red)">Не приложение ChatGPT!</span></p>
+          </div>
+          
+          <div class="step">
+            <div class="num">2</div>
+            <div class="title">Войдите в ChatGPT</div>
+            <p class="desc">Откройте <a class="text-link" href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> и войдите в свой аккаунт через браузер.</p>
+          </div>
+          
+          <div class="step">
+            <div class="num">3</div>
+            <div class="title">Откройте ссылку</div>
+            <p class="desc">В <b>этом же браузере</b> откройте ссылку:</p>
+            <p style="margin-top:12px">
+              <a class="mono-link" href="https://chatgpt.com/api/auth/session" target="_blank" rel="noopener">
+                chatgpt.com/api/auth/session
+              </a>
+            </p>
+          </div>
+          
+          <div class="step">
+            <div class="num">4</div>
+            <div class="title">Скопируйте данные</div>
+            <p class="desc">Выделите весь текст на странице и скопируйте его. Вставьте в поле ниже.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Форма -->
+    <div class="form-section">
+      <h2>Вставьте данные</h2>
+      <p class="muted-text">Скопируйте весь текст со страницы и вставьте в поле ниже.</p>
+      
+      <div class="form-grid">
+        <textarea id="authJson" placeholder="Вставьте данные сюда..."></textarea>
+        <div class="form-actions">
+          <button class="btn" id="btnActivate">⚡ Подключить</button>
+          <button class="btn btn-dark" id="btnSupport" type="button">💬 Помощь</button>
+          <p class="hint">Поддержка доведёт до результата</p>
+        </div>
+      </div>
+
+      <div id="statusBox" class="status"></div>
+
+      <div class="note">
+        <span class="note-icon">💡</span>
+        <span>Частая ошибка — неполное копирование текста. Убедитесь, что скопировали всё целиком (Ctrl+A → Ctrl+C).</span>
+      </div>
+    </div>
+
+    <footer>
+      <div class="copy">© <span id="year">2025</span> CodeNext. Все права защищены.</div>
+      <div class="footer-links">
+        <a href="/refund">Возврат средств</a>
+        <a href="/privacy">Конфиденциальность</a>
+        <a href="/offer">Оферта</a>
+        <a href="https://t.me/CodeNext_support" target="_blank">Поддержка</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // ===== ТЕМА =====
+    const themeBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    function updateIcon() {
+      themeBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updateIcon();
+    
+    themeBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
+    
+    // Год
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    // ===== PARTICLES (Only Desktop) =====
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) {
+      window.addEventListener('load', () => {
+        const particlesEl = document.getElementById('particles');
+        if (particlesEl) {
+          const particleCount = 40;
+          const fragment = document.createDocumentFragment();
+          for (let i = 0; i < particleCount; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (15 + Math.random() * 15) + 's';
+            p.style.width = (2 + Math.random() * 3) + 'px';
+            p.style.height = p.style.width;
+            fragment.appendChild(p);
+          }
+          particlesEl.appendChild(fragment);
+        }
+      });
+    }
+    
+    // ===== ПЕРЕКЛЮЧАТЕЛЬ УСТРОЙСТВ =====
+    const deviceBtns = document.querySelectorAll('.device-btn');
+    const desktopInstr = document.getElementById('desktop-instruction');
+    const mobileInstr = document.getElementById('mobile-instruction');
+    
+    deviceBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        deviceBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const device = btn.dataset.device;
+        if (device === 'desktop') {
+          desktopInstr.classList.add('active');
+          mobileInstr.classList.remove('active');
+        } else {
+          mobileInstr.classList.add('active');
+          desktopInstr.classList.remove('active');
+        }
+      });
+    });
+    
+    // Автоопределение устройства
+    if (window.innerWidth <= 768) {
+      document.querySelector('[data-device="mobile"]').click();
+    }
+    
+    // ===== CSRF INIT =====
+    window.__csrfToken = '';
+    let csrfReady = false;
+    
+    async function refreshCsrf() {
+      try {
+        const r = await fetch('/cabinet/csrf-token', { credentials: 'include' });
+        const data = await r.json().catch(() => ({}));
+        if (data && data.csrf_token) {
+          window.__csrfToken = data.csrf_token;
+          csrfReady = true;
+        }
+      } catch (e) {
+        console.warn('Failed to init CSRF token:', e);
+      }
+      return window.__csrfToken;
+    }
+    refreshCsrf();
+    
+    // ===== ФОРМА АКТИВАЦИИ =====
+    function getTokenFromPath() {
+      const parts = (location.pathname || '').split('/').filter(Boolean);
+      const idx = parts.indexOf('l');
+      if (idx !== -1 && parts[idx + 1]) return parts[idx + 1];
+      return new URL(location.href).searchParams.get('token') || '';
+    }
+    
+    const TOKEN = getTokenFromPath();
+    const supportUrl = 'https://t.me/CodeNext_support';
+    const authEl = document.getElementById('authJson');
+    const btn = document.getElementById('btnActivate');
+    const btnSupport = document.getElementById('btnSupport');
+    const statusBox = document.getElementById('statusBox');
+    
+    btnSupport.addEventListener('click', () => window.open(supportUrl, '_blank'));
+    
+    function setStatus(type, text) {
+      statusBox.className = 'status ' + (type || '');
+      statusBox.textContent = text || '';
+    }
+    
+    btn.addEventListener('click', async () => {
+      const auth_json = (authEl.value || '').trim();
+      
+      if (!TOKEN) {
+        setStatus('err', 'Ссылка недействительна. Напишите в поддержку.');
+        return;
+      }
+      
+      if (!auth_json) {
+        setStatus('err', 'Вставьте данные в поле.');
+        return;
+      }
+      
+      // ===== CSRF CHECK =====
+      if (!csrfReady) {
+        setStatus('wait', '⏳ Инициализация защиты... Подождите пару секунд.');
+        btn.disabled = true;
+        for (let attempt = 0; attempt < 3 && !csrfReady; attempt++) {
+          await refreshCsrf();
+          if (!csrfReady) {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+        btn.disabled = false;
+        if (!csrfReady) {
+          setStatus('err', 'Ошибка инициализации. Обновите страницу (Ctrl+F5) или напишите в поддержку.');
+          return;
+        }
+      }
+      
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Подключение…';
+      setStatus('wait', '⏳ Идёт активация. Обычно 1–3 минуты. Не закрывайте страницу!');
+      
+      try {
+        await refreshCsrf();
+        
+        // ===== ABORT CONTROLLER (240 sec timeout) =====
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 240000);
+        
+        const r = await fetch('/activate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': window.__csrfToken || ''
+          },
+          body: JSON.stringify({ token: TOKEN, auth_json }),
+          credentials: 'include',
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeout);
+        
+        const data = await r.json().catch(() => ({}));
+        
+        if (r.ok && data && data.status === 'ok') {
+          setStatus('ok', '✅ Подписка подключена! Перенаправляем…');
+          setTimeout(() => {
+            window.location.href = (data.redirect || '/success');
+          }, 800);
+          return;
+        }
+        
+        const msg = (data && (data.error || data.message)) || 'Ошибка. Напишите в поддержку.';
+        setStatus('err', msg);
+        
+      } catch (e) {
+        if (e.name === 'AbortError') {
+          setStatus('err', 'Превышено время ожидания. Проверьте, появилась ли подписка в ChatGPT.');
+        } else {
+          setStatus('err', 'Ошибка связи. Попробуйте ещё раз или напишите в поддержку.');
+        }
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '⚡ Подключить';
+      }
+    });
+  </script>
+</body>
+</html>

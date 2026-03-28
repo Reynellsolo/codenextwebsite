@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>404 — Страница не найдена | CodeNext</title>
+
+  <!-- ===== FAVICONS (BASE64) ===== -->
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+
+  <!-- ===== FONTS (OPTIMIZED) ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+
+  <!-- АВТОВЫБОР ТЕМЫ -->
+  <script>
+    (function(){
+      const saved = localStorage.getItem('theme');
+      const sys = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if(saved === 'light' || (!saved && sys)){
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <style>
+    /* ФИКС CLS */
+    @font-face {
+      font-family: 'Inter'; font-style: normal; font-weight: 400 900; font-display: swap;
+      src: local('Inter'), local('Inter-Regular'); size-adjust: 100%; ascent-override: 90%;
+    }
+    :root{--bg:#050508;--bg-secondary:#0a0a0f;--card:rgba(255,255,255,0.04);--card-hover:rgba(255,255,255,0.08);--card-border:rgba(255,255,255,0.1);--card-border-hover:rgba(255,255,255,0.2);--text:#fff;--text-secondary:#e4e4e7;--muted:rgba(255,255,255,0.6);--accent:#818cf8;--accent2:#a78bfa;--accent-rgb:129,140,248;--accent-light:rgba(129,140,248,0.15);--accent-glow:rgba(129,140,248,0.5);--green:#34d399;--green-rgb:52,211,153;--green-light:rgba(52,211,153,0.15);--red:#f87171;--red-rgb:248,113,113}
+    [data-theme="light"]{--bg:#f5f5f7;--bg-secondary:#fff;--card:rgba(255,255,255,0.9);--card-hover:#fff;--card-border:rgba(0,0,0,0.1);--card-border-hover:rgba(0,0,0,0.15);--text:#1a1a1a;--text-secondary:#2d2d2d;--muted:#555;--accent:#6366f1;--accent2:#8b5cf6;--accent-rgb:99,102,241;--accent-light:rgba(99,102,241,0.12);--accent-glow:rgba(99,102,241,0.4);--green:#059669;--green-rgb:5,150,105;--green-light:rgba(5,150,105,0.12);--red:#dc2626;--red-rgb:220,38,38}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.6;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background .5s ease,color .3s ease;display:flex;flex-direction:column}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse 120% 80% at 50% -20%,rgba(var(--accent-rgb),.3),transparent 50%),radial-gradient(ellipse 80% 60% at 90% 50%,rgba(167,139,250,.15),transparent 50%),radial-gradient(ellipse 80% 60% at 10% 80%,rgba(var(--green-rgb),.1),transparent 50%);animation:bgPulse 10s ease-in-out infinite alternate}
+    [data-theme="light"] body::before{opacity:.5}
+    @keyframes bgPulse{0%{opacity:1;transform:scale(1)}100%{opacity:.8;transform:scale(1.05)}}
+    .orb{position:fixed;border-radius:50%;filter:blur(80px);z-index:-1;animation:orbFloat 20s ease-in-out infinite;pointer-events:none}
+    .orb-1{width:600px;height:600px;background:rgba(var(--accent-rgb),.15);top:-200px;left:-200px}
+    .orb-2{width:500px;height:500px;background:rgba(167,139,250,.1);top:50%;right:-200px;animation-delay:-5s}
+    .orb-3{width:400px;height:400px;background:rgba(var(--green-rgb),.1);bottom:-100px;left:30%;animation-delay:-10s}
+    [data-theme="light"] .orb{opacity:.4}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,30px) scale(1.05)}50%{transform:translate(-20px,50px) scale(.95)}75%{transform:translate(40px,-20px) scale(1.02)}}
+    .particles{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+    .particle{position:absolute;width:3px;height:3px;background:rgba(var(--accent-rgb),.6);border-radius:50%;animation:particleFloat 20s linear infinite;box-shadow:0 0 10px rgba(var(--accent-rgb),.3)}
+    [data-theme="light"] .particle{opacity:.5}
+    @keyframes particleFloat{0%{transform:translateY(100vh);opacity:0}10%,90%{opacity:1}100%{transform:translateY(-100vh);opacity:0}}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1000px;margin:0 auto;padding:32px 24px 80px;flex:1;display:flex;flex-direction:column}
+
+    /* TOPBAR */
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 0;margin-bottom:48px}
+    .brand{display:flex;align-items:center;gap:14px;cursor:pointer}
+    .logo{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;box-shadow:0 0 40px var(--accent-glow);position:relative;animation:logoPulse 3s ease-in-out infinite;transition:transform .3s ease}
+    .logo:hover{transform:scale(1.1) rotate(-5deg)}
+    @keyframes logoPulse{0%,100%{box-shadow:0 0 40px var(--accent-glow)}50%{box-shadow:0 0 60px var(--accent-glow),0 0 100px rgba(var(--accent-rgb),.4)}}
+    .logo::before{content:"";position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 60%)}
+    .logo span{position:relative;z-index:1;font-family:monospace}
+    .brand-title .name{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px}
+    .brand-title .tag{font-size:13px;color:var(--muted);font-weight:500;margin-top:2px}
+    .top-actions{display:flex;gap:12px;align-items:center}
+    .pill{padding:12px 20px;background:var(--card);border:1px solid var(--card-border);border-radius:100px;font-size:14px;font-weight:500;color:var(--muted);transition:all .3s ease}
+    [data-theme="light"] .pill{background:#fff}
+    .pill:hover{background:var(--card-hover);border-color:var(--accent);color:var(--text);transform:translateY(-2px)}
+    .theme-btn{width:48px;height:48px;border-radius:50%;background:var(--card);border:1px solid var(--card-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;transition:all .4s cubic-bezier(.175,.885,.32,1.275)}
+    [data-theme="light"] .theme-btn{background:#fff}
+    .theme-btn:hover{background:var(--accent-light);border-color:var(--accent);transform:scale(1.15) rotate(180deg);box-shadow:0 0 30px var(--accent-glow)}
+
+    /* 404 CONTENT */
+    .error-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px}
+
+    /* ГЛИТЧ ЭФФЕКТ */
+    .error-code{font-size:clamp(100px,20vw,200px);font-weight:900;letter-spacing:-8px;line-height:1;margin-bottom:24px;position:relative;color:var(--text);user-select:none;cursor:default}
+    .error-code::before,.error-code::after{content:"404";position:absolute;top:0;left:0;width:100%;height:100%}
+    .error-code::before{color:var(--accent);animation:glitch1 3s infinite;clip-path:polygon(0 0,100% 0,100% 45%,0 45%)}
+    .error-code::after{color:var(--accent2);animation:glitch2 3s infinite;clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%)}
+    @keyframes glitch1{0%,92%,100%{transform:translate(0)}93%{transform:translate(-8px,-2px)}96%{transform:translate(5px,1px)}}
+    @keyframes glitch2{0%,92%,100%{transform:translate(0)}94%{transform:translate(8px,2px)}97%{transform:translate(-5px,-1px)}}
+
+    /* СМАЙЛИК */
+    .error-emoji{font-size:80px;margin-bottom:32px;animation:emojiFloat 3s ease-in-out infinite;cursor:pointer;transition:transform .3s;user-select:none}
+    .error-emoji:hover{transform:scale(1.3) rotate(20deg)!important}
+    @keyframes emojiFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(5deg)}}
+    .error-emoji.dizzy{animation:dizzy .5s ease}
+    @keyframes dizzy{0%{transform:rotate(0)}25%{transform:rotate(20deg) scale(1.2)}50%{transform:rotate(-20deg) scale(0.9)}75%{transform:rotate(10deg) scale(1.1)}100%{transform:rotate(0)}}
+
+    .error-title{font-size:clamp(24px,4vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:16px;color:var(--text)}
+    .error-title .gradient{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--green),var(--accent));background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientFlow 4s linear infinite}
+    @keyframes gradientFlow{0%{background-position:0% center}100%{background-position:300% center}}
+    .error-desc{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
+
+    /* КНОПКИ */
+    .error-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+    .btn{padding:18px 32px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:16px;font-weight:700;border:none;border-radius:16px;cursor:pointer;transition:all .3s ease;box-shadow:0 10px 40px var(--accent-glow);position:relative;overflow:hidden;white-space:nowrap;font-family:inherit}
+    .btn::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .6s ease}
+    .btn:hover::before{left:100%}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 20px 60px var(--accent-glow)}
+    .btn-dark{background:var(--card);border:1px solid var(--card-border);box-shadow:none;color:var(--text)}
+    [data-theme="light"] .btn-dark{background:#f8f8fc}
+    .btn-dark:hover{background:var(--card-hover);border-color:var(--accent);box-shadow:0 10px 30px rgba(0,0,0,0.1)}
+    .btn-dark::before{display:none}
+
+    /* ФРАЗЫ */
+    .fun-quote{background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:24px 32px;max-width:560px;width:100%;transition:all .4s ease;position:relative;overflow:hidden}
+    [data-theme="light"] .fun-quote{background:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+    .fun-quote:hover{border-color:var(--card-border-hover)}
+    .fun-quote::before{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(var(--accent-rgb),.08),transparent);transition:left .7s ease}
+    .fun-quote:hover::before{left:100%}
+    .fun-quote-label{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:700;margin-bottom:10px}
+    .fun-quote-text{font-size:15px;color:var(--muted);line-height:1.7;min-height:48px}
+    .fun-quote-text .highlight{color:var(--accent);font-weight:600}
+    .fun-quote-refresh{margin-top:16px;display:flex;justify-content:center}
+    .refresh-btn{padding:8px 20px;background:var(--accent-light);border:1px solid rgba(var(--accent-rgb),.2);border-radius:10px;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;font-family:inherit}
+    .refresh-btn:hover{background:rgba(var(--accent-rgb),.25);border-color:var(--accent);transform:scale(1.05)}
+    .refresh-btn:active{transform:scale(.95)}
+
+    /* МИНИ-ИГРА ПАСХАЛКА */
+    .easter-egg{margin-top:32px;font-size:13px;color:var(--muted);opacity:.5;cursor:pointer;transition:all .3s}
+    .easter-egg:hover{opacity:1;color:var(--accent)}
+    .game-area{display:none;margin-top:24px;background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:24px;max-width:400px;width:100%;text-align:center}
+    .game-area.active{display:block;animation:fadeUp .4s ease}
+    .game-title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text)}
+    .game-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+    .game-card{aspect-ratio:1;background:var(--accent-light);border:2px solid var(--card-border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:all .3s;user-select:none}
+    .game-card:hover{border-color:var(--accent);transform:scale(1.05)}
+    .game-card.flipped{background:var(--card-hover);border-color:var(--accent);transform:rotateY(180deg)}
+    .game-card.matched{background:var(--green-light);border-color:var(--green);opacity:.7;pointer-events:none}
+    .game-card .card-content{display:none}
+    .game-card.flipped .card-content{display:block}
+    .game-score{font-size:14px;color:var(--muted);font-weight:600}
+    .game-score span{color:var(--accent)}
+
+    /* СЧЁТЧИК КЛИКОВ */
+    .click-counter{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:12px 18px;font-size:13px;color:var(--muted);opacity:0;transition:all .5s;pointer-events:none;z-index:100}
+    .click-counter.visible{opacity:1}
+    .click-counter span{color:var(--accent);font-weight:700}
+
+    /* FOOTER */
+    footer{text-align:center;padding:48px 0;border-top:1px solid var(--card-border);margin-top:auto}
+    footer .copy{color:var(--muted);font-size:14px;margin-bottom:20px}
+    .footer-links{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+    .footer-links a{color:var(--muted);font-size:14px;font-weight:500;transition:color .3s}
+    .footer-links a:hover{color:var(--accent)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .topbar{animation:fadeUp .5s ease both}
+    .error-content{animation:fadeUp .6s ease .1s both}
+
+    @media (max-width:768px){
+      .container{padding:20px 16px 60px}
+      .topbar{flex-direction:column;gap:16px;text-align:center}
+      .top-actions{width:100%;justify-content:center}
+      .error-code{letter-spacing:-4px}
+      .error-actions{flex-direction:column;align-items:center}
+      .error-actions .btn{width:100%;max-width:280px}
+      .footer-links{gap:20px}
+      .orb{display:none}
+    }
+
+    /* МОБИЛЬНОЕ УСКОРЕНИЕ */
+    @media (max-width:768px){
+      .topbar,.error-content{animation:none!important;opacity:1!important;transform:none!important}
+      body::before{animation:none!important;background:radial-gradient(circle at 50% 20%,rgba(129,140,248,.15),transparent 70%)}
+      .orb,.particles{display:none!important}
+      .error-code::before,.error-code::after{animation:none!important;transform:none!important}
+    }
+    @media screen and (-webkit-min-device-pixel-ratio:0){select,textarea,input{font-size:16px!important}}
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <nav class="topbar">
+      <a href="/" class="brand">
+        <div class="logo"><span>&lt;/&gt;</span></div>
+        <div class="brand-title">
+          <div class="name">CodeNext</div>
+          <div class="tag">Премиум подписки ChatGPT</div>
+        </div>
+      </a>
+      <div class="top-actions">
+        <a class="pill" href="https://t.me/CodeNext_support" target="_blank">💬 Поддержка</a>
+        <button class="theme-btn" id="themeToggle" title="Сменить тему">🌙</button>
+      </div>
+    </nav>
+
+    <div class="error-content">
+      <!-- Смайлик (кликабельный) -->
+      <div class="error-emoji" id="emoji" title="Потыкай меня 👀">🤖</div>
+
+      <!-- 404 с глитч-эффектом -->
+      <div class="error-code">404</div>
+
+      <h1 class="error-title">Упс! Вы нашли <span class="gradient">пустоту</span></h1>
+      <p class="error-desc">
+        Эта страница решила уйти в отпуск. Возможно, она загорает где-то на Бали, 
+        а может, просто никогда не существовала. Мы не осуждаем. 🏖️
+      </p>
+
+      <!-- Кнопки -->
+      <div class="error-actions">
+        <a href="/" class="btn">🏠 На главную</a>
+        <a href="https://t.me/CodeNext_support" target="_blank" class="btn btn-dark">💬 Написать в поддержку</a>
+      </div>
+
+      <!-- Рандомные фразы -->
+      <div class="fun-quote" id="funQuote">
+        <div class="fun-quote-label">💭 Мысль дня</div>
+        <div class="fun-quote-text" id="quoteText"></div>
+        <div class="fun-quote-refresh">
+          <button class="refresh-btn" id="refreshQuote">🎲 Другая фраза</button>
+        </div>
+      </div>
+
+      <!-- Пасхалка -->
+      <div class="easter-egg" id="easterEgg">🕹️ Скучно? Нажми сюда...</div>
+      
+      <!-- Мини-игра -->
+      <div class="game-area" id="gameArea">
+        <div class="game-title">🧠 Найди пары!</div>
+        <div class="game-grid" id="gameGrid"></div>
+        <div class="game-score">Ходов: <span id="moveCount">0</span></div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="copy">© <span id="year">2025</span> CodeNext. Все права защищены.</div>
+      <div class="footer-links">
+        <a href="/refund">Возврат средств</a>
+        <a href="/privacy">Конфиденциальность</a>
+        <a href="/offer">Оферта</a>
+        <a href="https://t.me/CodeNext_support" target="_blank">Поддержка</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Счётчик кликов -->
+  <div class="click-counter" id="clickCounter">Кликов по роботу: <span id="clickCount">0</span></div>
+
+  <script>
+    // ===== ТЕМА =====
+    const themeBtn = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    function updateIcon() {
+      themeBtn.textContent = html.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updateIcon();
+    themeBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateIcon();
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== PARTICLES =====
+    if (window.innerWidth >= 768) {
+      window.addEventListener('load', () => {
+        const particlesEl = document.getElementById('particles');
+        if (particlesEl) {
+          const fragment = document.createDocumentFragment();
+          for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 20 + 's';
+            p.style.animationDuration = (15 + Math.random() * 15) + 's';
+            p.style.width = (2 + Math.random() * 3) + 'px';
+            p.style.height = p.style.width;
+            fragment.appendChild(p);
+          }
+          particlesEl.appendChild(fragment);
+        }
+      });
+    }
+
+    // ===== РАНДОМНЫЕ ФРАЗЫ =====
+    const quotes = [
+      'Вы набрали URL, которого не существует. <span class="highlight">Поздравляем</span>, вы первооткрыватель! 🧭',
+      'Даже <span class="highlight">ChatGPT</span> не знает, что здесь должно быть. А он знает почти всё. 🤯',
+      'Эта страница ушла учить <span class="highlight">Python</span>. Вернётся, когда поймёт рекурсию. 🐍',
+      'Ошибка 404: страница не найдена. Но <span class="highlight">мы вас нашли</span> — и это главное! ❤️',
+      'Вы заблудились в интернете? Бывает. <span class="highlight">Google Maps</span> тут не поможет. 🗺️',
+      'Эту страницу удалил стажёр. <span class="highlight">Стажёр уже уволен</span>. Шутка. Или нет. 😅',
+      'Возможно, вы из <span class="highlight">параллельной вселенной</span>, где эта страница существует. Но не в этой. 🌌',
+      'Нажмите Ctrl+Z, чтобы вернуться назад. Ой, <span class="highlight">это так не работает</span>. 😬',
+      'Эта страница сбежала с сервера. Если увидите — <span class="highlight">не кормите её</span>. 🏃‍♂️',
+      'Здесь пусто, как в холодильнике в конце месяца. <span class="highlight">Но на главной вкусно</span>! 🍕',
+      '<span class="highlight">sudo find / -name "page"</span> — Не найдено. Даже Linux бессилен. 🐧',
+      'Эта страница решила стать <span class="highlight">NFT</span> и теперь стоит 0.001 ETH. Не покупайте. 🎨',
+      'Мы проверили: эта страница не существовала даже в <span class="highlight">Web 1.0</span>. Классика. 🕸️',
+      'По данным <span class="highlight">аналитики</span>, вы 7-й человек на этой странице сегодня. Все потерялись. 📊',
+      'Если вы читаете это, значит у вас есть <span class="highlight">интернет</span>. Это уже хорошо! 🎉',
+    ];
+
+    const quoteText = document.getElementById('quoteText');
+    let lastQuoteIdx = -1;
+
+    function showRandomQuote() {
+      let idx;
+      do { idx = Math.floor(Math.random() * quotes.length); } while (idx === lastQuoteIdx && quotes.length > 1);
+      lastQuoteIdx = idx;
+      quoteText.style.opacity = '0';
+      quoteText.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        quoteText.innerHTML = quotes[idx];
+        quoteText.style.transition = 'all .3s ease';
+        quoteText.style.opacity = '1';
+        quoteText.style.transform = 'translateY(0)';
+      }, 200);
+    }
+    showRandomQuote();
+    document.getElementById('refreshQuote').addEventListener('click', showRandomQuote);
+
+    // ===== КЛИКАБЕЛЬНЫЙ СМАЙЛИК =====
+    const emoji = document.getElementById('emoji');
+    const clickCounter = document.getElementById('clickCounter');
+    const clickCountEl = document.getElementById('clickCount');
+    const emojis = ['🤖','😵‍💫','🤪','🥴','😵','💀','👻','🛸','🌈','🤡','🎃','😎','🧠','🫠','💩','🦄','👽','🔥','❄️','🍕'];
+    let clicks = 0;
+    let counterTimeout;
+
+    emoji.addEventListener('click', () => {
+      clicks++;
+      clickCountEl.textContent = clicks;
+      
+      // Показать счётчик
+      clickCounter.classList.add('visible');
+      clearTimeout(counterTimeout);
+      counterTimeout = setTimeout(() => clickCounter.classList.remove('visible'), 3000);
+      
+      // Анимация
+      emoji.classList.remove('dizzy');
+      void emoji.offsetWidth;
+      emoji.classList.add('dizzy');
+      
+      // Менять эмодзи
+      emoji.textContent = emojis[clicks % emojis.length];
+      
+      // Пасхалки по количеству кликов
+      if (clicks === 10) {
+        document.title = '🤖 Хватит кликать! | CodeNext';
+      }
+      if (clicks === 25) {
+        document.title = '😵 Серьёзно?! 25 кликов?! | CodeNext';
+      }
+      if (clicks === 50) {
+        document.title = '🏆 Рекорд! 50 кликов! | CodeNext';
+        emoji.style.fontSize = '120px';
+      }
+      if (clicks === 100) {
+        document.title = '👑 ЛЕГЕНДА! 100 кликов! | CodeNext';
+        document.body.style.animation = 'rainbow 2s linear infinite';
+        const style = document.createElement('style');
+        style.textContent = '@keyframes rainbow{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}';
+        document.head.appendChild(style);
+      }
+    });
+
+    // ===== МИНИ-ИГРА =====
+    const gameEmojis = ['🎮','💻','🚀','⚡','🎯','🧩','🎲','🌟'];
+    let gameCards = [];
+    let flipped = [];
+    let matched = 0;
+    let moves = 0;
+    let canFlip = true;
+
+    function initGame() {
+      const grid = document.getElementById('gameGrid');
+      grid.innerHTML = '';
+      matched = 0;
+      moves = 0;
+      flipped = [];
+      canFlip = true;
+      document.getElementById('moveCount').textContent = '0';
+      
+      // Создаём пары
+      const pairs = [...gameEmojis, ...gameEmojis];
+      // Перемешиваем
+      for (let i = pairs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+      }
+      
+      pairs.forEach((emoji, idx) => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.dataset.emoji = emoji;
+        card.dataset.idx = idx;
+        card.innerHTML = '<span class="card-content">' + emoji + '</span>';
+        card.addEventListener('click', () => flipCard(card));
+        grid.appendChild(card);
+      });
+    }
+
+    function flipCard(card) {
+      if (!canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+      
+      card.classList.add('flipped');
+      flipped.push(card);
+      
+      if (flipped.length === 2) {
+        moves++;
+        document.getElementById('moveCount').textContent = moves;
+        canFlip = false;
+        
+        if (flipped[0].dataset.emoji === flipped[1].dataset.emoji) {
+          // Совпало!
+          flipped[0].classList.add('matched');
+          flipped[1].classList.add('matched');
+          matched++;
+          flipped = [];
+          canFlip = true;
+          
+          if (matched === gameEmojis.length) {
+            setTimeout(() => {
+              const title = document.querySelector('.game-title');
+              title.textContent = '🎉 Победа за ' + moves + ' ходов!';
+              title.style.color = 'var(--green)';
+            }, 500);
+          }
+        } else {
+          // Не совпало
+          setTimeout(() => {
+            flipped[0].classList.remove('flipped');
+            flipped[1].classList.remove('flipped');
+            flipped = [];
+            canFlip = true;
+          }, 800);
+        }
+      }
+    }
+
+    document.getElementById('easterEgg').addEventListener('click', () => {
+      const gameArea = document.getElementById('gameArea');
+      if (gameArea.classList.contains('active')) {
+        gameArea.classList.remove('active');
+      } else {
+        gameArea.classList.add('active');
+        initGame();
+      }
+    });
+  </script>
+</body>
+</html>

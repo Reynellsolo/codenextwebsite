@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Личный кабинет — CodeNext</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#818cf8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-secondary: #0a0a0f;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.1);
+      --card-border-hover: rgba(255,255,255,0.2);
+      --text: #fff;
+      --text-secondary: #e4e4e7;
+      --muted: rgba(255,255,255,0.6);
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --accent-rgb: 129,140,248;
+      --accent-light: rgba(129,140,248,0.15);
+      --accent-glow: rgba(129,140,248,0.5);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --green-light: rgba(52,211,153,0.15);
+      --green-glow: rgba(52,211,153,0.5);
+      --yellow: #fbbf24;
+      --yellow-rgb: 251,191,36;
+      --yellow-light: rgba(251,191,36,0.15);
+      --red: #ef4444;
+      --red-rgb: 239,68,68;
+      --red-light: rgba(239,68,68,0.15);
+    }
+    
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-secondary: #fff;
+      --card: rgba(255,255,255,0.9);
+      --card-hover: #fff;
+      --card-border: rgba(0,0,0,0.1);
+      --card-border-hover: rgba(0,0,0,0.15);
+      --text: #1a1a1a;
+      --text-secondary: #2d2d2d;
+      --muted: #555;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-rgb: 99,102,241;
+      --accent-light: rgba(99,102,241,0.12);
+      --accent-glow: rgba(99,102,241,0.4);
+      --green: #059669;
+      --green-rgb: 5,150,105;
+      --green-light: rgba(5,150,105,0.12);
+      --green-glow: rgba(5,150,105,0.4);
+      --yellow: #d97706;
+      --yellow-rgb: 217,119,6;
+      --yellow-light: rgba(217,119,6,0.12);
+      --red: #dc2626;
+      --red-rgb: 220,38,38;
+      --red-light: rgba(220,38,38,0.12);
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      transition: background .5s ease, color .3s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: 
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--accent-rgb), .25), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 90% 50%, rgba(167,139,250,.12), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 10% 80%, rgba(var(--green-rgb),.08), transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    
+    [data-theme="light"] body::before { opacity: .5; }
+    
+    @keyframes bgPulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: .8; transform: scale(1.05); }
+    }
+    
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: rgba(var(--accent-rgb), .12);
+      top: -200px;
+      left: -200px;
+    }
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: rgba(167,139,250,.08);
+      bottom: -150px;
+      right: -150px;
+      animation-delay: -5s;
+    }
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: rgba(var(--green-rgb),.06);
+      top: 50%;
+      right: -100px;
+      animation-delay: -10s;
+    }
+    
+    [data-theme="light"] .orb { opacity: .3; }
+    
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, 30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(.95); }
+      75% { transform: translate(40px, -20px) scale(1.02); }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .orb { display: none; }
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    
+    .topbar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 0;
+      margin-bottom: 24px;
+    }
+    
+    .topbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      font-family: monospace;
+      flex-shrink: 0;
+      box-shadow: 0 0 30px var(--accent-glow);
+      position: relative;
+      transition: transform .3s ease;
+    }
+    
+    .logo:hover { transform: scale(1.1) rotate(-5deg); }
+    
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,.3), transparent 60%);
+    }
+    
+    .brand-text .name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.5px;
+    }
+    
+    .brand-text .tag {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      display: none;
+      box-shadow: 0 0 10px var(--green-glow);
+      animation: pulse 1s infinite;
+    }
+    
+    .loading-dot.active { display: inline-block; }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(.8); }
+    }
+    
+    .nav-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .pill {
+      padding: 12px 18px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all .3s ease;
+    }
+    
+    [data-theme="light"] .pill {
+      background: rgba(255,255,255,0.8);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .pill:hover {
+      background: var(--card-hover);
+      border-color: var(--card-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    }
+    
+    .pill:active {
+      transform: translateY(0);
+    }
+    
+    .pill.accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    
+    .pill.accent:hover {
+      box-shadow: 0 8px 25px var(--accent-glow);
+    }
+    
+    .pill.loading {
+      opacity: .7;
+      pointer-events: none;
+    }
+    
+    .pill.loading .r-icon {
+      animation: spin .7s linear infinite;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .theme-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+    }
+    
+    [data-theme="light"] .theme-btn {
+      background: rgba(255,255,255,0.8);
+    }
+    
+    .theme-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: scale(1.1) rotate(180deg);
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+    
+    .page-head {
+      margin-bottom: 32px;
+      text-align: center;
+      animation: fadeUp .6s ease;
+    }
+    
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .page-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+      letter-spacing: -.5px;
+    }
+    
+    .page-title .grad {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-sub {
+      color: var(--muted);
+      font-size: 15px;
+    }
+    
+    .update-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      margin-left: 8px;
+      padding: 4px 10px;
+      background: var(--green-light);
+      border-radius: 100px;
+      color: var(--green);
+      font-weight: 600;
+    }
+    
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 28px;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 40px rgba(var(--accent-rgb), .08),
+        0 20px 40px rgba(0,0,0,.15);
+      animation: cardAppear .6s cubic-bezier(.4,0,.2,1) backwards;
+      transition: border-color .3s ease, box-shadow .3s ease, transform .3s ease;
+    }
+    
+    .card:nth-child(1) { animation-delay: .05s; }
+    .card:nth-child(2) { animation-delay: .1s; }
+    .card:nth-child(3) { animation-delay: .15s; }
+    .card:nth-child(4) { animation-delay: .2s; }
+    .card:nth-child(5) { animation-delay: .25s; }
+    .card:nth-child(6) { animation-delay: .3s; }
+    
+    [data-theme="light"] .card {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 
+        0 0 30px rgba(var(--accent-rgb), .06),
+        0 20px 40px rgba(0,0,0,.08);
+    }
+    
+    .card:hover {
+      border-color: var(--card-border-hover);
+    }
+    
+    @keyframes cardAppear {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(.96); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+    
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    
+    .card-ico {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(var(--accent-rgb), .2);
+      position: relative;
+    }
+    
+    .card-ico::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.2), transparent 60%);
+    }
+    
+    .card-ico.green { 
+      background: var(--green-light); 
+      box-shadow: 0 0 20px rgba(var(--green-rgb), .2);
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.3px;
+    }
+    
+    .p-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .p-item {
+      padding: 20px;
+      background: var(--card-hover);
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      transition: all .3s ease;
+    }
+    
+    .p-item:hover {
+      border-color: var(--card-border-hover);
+      transform: translateX(4px);
+    }
+    
+    [data-theme="light"] .p-item {
+      background: #f8f9fc;
+    }
+    
+    .p-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 8px;
+    }
+    
+    .p-value {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      word-break: break-all;
+    }
+    
+    .balance {
+      font-size: 42px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+    
+    .balance.pop { animation: pop .4s cubic-bezier(.68,-.55,.265,1.55); }
+    
+    @keyframes pop { 
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .ref-box { margin-top: 12px; }
+    
+    .ref-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .ref-input {
+      width: 100%;
+      padding: 16px 18px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--bg-secondary);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      color: var(--accent);
+      outline: none;
+      transition: all .3s ease;
+    }
+    
+    [data-theme="light"] .ref-input {
+      background: #fff;
+      border-color: #e2e8f0;
+    }
+    
+    .ref-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    
+    .copy-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+    
+    .copy-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transition: left .6s ease;
+    }
+    
+    .copy-btn:hover::before { left: 100%; }
+    
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px var(--accent-glow);
+    }
+    
+    .copy-btn:active { transform: translateY(0); }
+    
+    .copy-btn.done {
+      background: linear-gradient(135deg, var(--green), #059669);
+      box-shadow: 0 8px 25px var(--green-glow);
+    }
+    
+    .ref-tip {
+      margin-top: 16px;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--accent-light), rgba(167,139,250,.1));
+      border: 1px solid rgba(var(--accent-rgb), .2);
+      border-radius: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .ref-tip b { color: var(--text); }
+    
+    .f-group { margin-bottom: 18px; }
+    
+    .f-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    
+    .f-input {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 2px solid var(--card-border);
+      background: var(--card-hover);
+      color: var(--text);
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 500;
+      outline: none;
+      transition: all .3s ease;
+    }
+    
+    [data-theme="light"] .f-input {
+      background: #fff;
+      border-color: #e2e8f0;
+    }
+    
+    .f-input:focus { 
+      border-color: var(--accent); 
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    
+    .f-input::placeholder { color: var(--muted); }
+    
+    textarea.f-input {
+      height: 110px;
+      min-height: 80px;
+      max-height: 200px;
+      resize: none;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 25px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+    
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transition: left .6s ease;
+    }
+    
+    .btn:hover::before { left: 100%; }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px var(--accent-glow);
+    }
+    
+    .btn:active { transform: translateY(0); }
+    
+    .btn:disabled { 
+      opacity: .6; 
+      cursor: not-allowed; 
+      transform: none !important;
+    }
+    
+    .btn.green { 
+      background: linear-gradient(135deg, var(--green), #059669); 
+      box-shadow: 0 8px 25px var(--green-glow);
+    }
+    
+    .btn.green:hover {
+      box-shadow: 0 12px 35px var(--green-glow);
+    }
+    
+    .tbl-wrap {
+      margin: 0 -28px;
+    }
+    
+    .tbl-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 28px;
+    }
+    
+    table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    
+    th {
+      text-align: left;
+      padding: 16px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      border-bottom: 2px solid var(--card-border);
+      white-space: nowrap;
+      background: var(--card);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(10px);
+    }
+    
+    [data-theme="light"] th { background: rgba(255,255,255,0.9); }
+    
+    td {
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text);
+      font-weight: 500;
+      vertical-align: middle;
+    }
+    
+    tr {
+      transition: background .2s ease;
+    }
+    
+    tr:hover:not(.empty) {
+      background: var(--card-hover);
+    }
+    
+    tr:last-child td { border-bottom: none; }
+    
+    .empty td {
+      text-align: center;
+      color: var(--muted);
+      padding: 48px 12px;
+      font-size: 15px;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      flex: 1;
+      min-width: calc(50% - 6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      font-size: 14px;
+      transition: all .3s ease;
+    }
+    
+    .stat:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(var(--accent-rgb), .15);
+    }
+    
+    [data-theme="light"] .stat { background: #f8f9fc; }
+    
+    .stat-val { 
+      font-weight: 900; 
+      color: var(--text); 
+      font-size: 16px;
+    }
+    .stat-lbl { color: var(--muted); }
+    
+    .oid {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 12px;
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-block;
+      color: var(--text-secondary);
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: all .3s ease;
+    }
+    
+    .oid:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .st {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    
+    .st-new, .st-pending { 
+      background: var(--yellow-light); 
+      color: var(--yellow); 
+    }
+    .st-approved, .st-completed, .st-paid, .st-active { 
+      background: var(--green-light); 
+      color: var(--green); 
+    }
+    .st-rejected, .st-failed { 
+      background: var(--red-light); 
+      color: var(--red); 
+    }
+    
+    [data-theme="light"] .st-new, [data-theme="light"] .st-pending { color: #b45309; }
+    [data-theme="light"] .st-approved, [data-theme="light"] .st-completed, 
+    [data-theme="light"] .st-paid, [data-theme="light"] .st-active { color: #047857; }
+    [data-theme="light"] .st-rejected, [data-theme="light"] .st-failed { color: #b91c1c; }
+    
+    .amt { 
+      font-weight: 800; 
+      font-family: 'SF Mono', 'Fira Code', monospace; 
+      font-size: 14px; 
+    }
+    .amt-pos { color: var(--green); }
+    .amt-neg { color: var(--red); }
+    
+    .time { 
+      color: var(--muted); 
+      font-size: 13px; 
+    }
+    
+    .pag {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 24px;
+      padding: 24px 28px 0;
+      border-top: 1px solid var(--card-border);
+    }
+    
+    .pag-info {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .pag-ctrl {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .pag-btn {
+      padding: 12px 20px;
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    
+    .pag-btn:hover:not(:disabled) {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .pag-btn:disabled { opacity: .4; cursor: not-allowed; }
+    
+    .pag-nums { display: flex; gap: 8px; }
+    
+    .pag-n {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    
+    .pag-n:hover:not(.on):not(.dots) {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .pag-n.on {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    
+    .pag-n.dots {
+      background: transparent;
+      border: none;
+      cursor: default;
+      color: var(--muted);
+    }
+    
+    #toast {
+      display: none;
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      padding: 18px 24px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      max-width: 400px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    
+    [data-theme="light"] #toast {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+    
+    #toast.ok { border-color: var(--green); }
+    #toast.err { border-color: var(--red); }
+    
+    #toast.show { 
+      display: block; 
+      animation: slideIn .4s cubic-bezier(.68,-.55,.265,1.55); 
+    }
+    #toast.hide { 
+      animation: slideOut .4s ease forwards; 
+    }
+    
+    @keyframes slideIn { 
+      from { transform: translateX(120%); opacity: 0; } 
+      to { transform: translateX(0); opacity: 1; } 
+    }
+    @keyframes slideOut { 
+      from { transform: translateX(0); opacity: 1; } 
+      to { transform: translateX(120%); opacity: 0; } 
+    }
+    
+    #toast p {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin: 0;
+    }
+    
+    @media (min-width: 768px) {
+      .container { padding: 28px; padding-bottom: 80px; }
+      
+      .topbar { flex-direction: row; justify-content: space-between; align-items: center; }
+      .topbar-row:first-child { flex: 0 0 auto; }
+      .nav-btns { justify-content: flex-end; }
+      
+      .page-head { text-align: left; }
+      .page-title { font-size: 38px; }
+      
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+      }
+      .c5 { grid-column: span 5; }
+      .c7 { grid-column: span 7; }
+      .c6 { grid-column: span 6; }
+      .c12 { grid-column: span 12; }
+      
+      .card { padding: 32px; }
+      .balance { font-size: 52px; }
+      
+      .ref-wrap { flex-direction: row; }
+      .copy-btn { width: auto; flex-shrink: 0; }
+      
+      .tbl-wrap { margin: 0 -32px; }
+      .tbl-scroll { padding: 0 32px; max-height: 450px; overflow-y: auto; }
+      
+      .pag { 
+        flex-direction: row; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 24px 32px 0; 
+      }
+    }
+    
+    @media (max-width: 520px) {
+      .container { padding: 16px; }
+      
+      .card { 
+        padding: 24px; 
+        border-radius: 24px; 
+      }
+      
+      .page-title { font-size: 26px; }
+      
+      .logo { width: 44px; height: 44px; }
+      
+      .theme-btn { width: 44px; height: 44px; }
+      
+      .balance { font-size: 36px; }
+      
+      .card-ico { width: 46px; height: 46px; font-size: 22px; }
+      
+      .card-title { font-size: 18px; }
+      
+      .tbl-wrap { margin: 0 -24px; }
+      .tbl-scroll { padding: 0 24px; }
+      
+      .pag { padding: 20px 24px 0; }
+      
+      .orb { display: none; }
+      
+      body::before {
+        animation: none;
+        background: radial-gradient(ellipse at 50% 0%, rgba(var(--accent-rgb), .2), transparent 60%);
+      }
+      
+      #toast {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        max-width: none;
+      }
+    }
+    
+    @supports (-webkit-touch-callout: none) {
+      .f-input, .ref-input { font-size: 16px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="container">
+    <header class="topbar">
+      <div class="topbar-row">
+        <a href="/" class="brand">
+          <div class="logo">&lt;/&gt;</div>
+          <div class="brand-text">
+            <div class="name">CodeNext</div>
+            <div class="tag">Личный кабинет <span class="loading-dot" id="dot"></span></div>
+          </div>
+        </a>
+        <button id="themeBtn" class="theme-btn" type="button" aria-label="Переключить тему">🌙</button>
+      </div>
+      <nav class="nav-btns">
+        <button id="refreshBtn" class="pill accent" type="button"><span class="r-icon">🔄</span> Обновить</button>
+        <a href="/" class="pill">🏠 Главная</a>
+        <a href="https://t.me/CodeNext_support" target="_blank" rel="noopener" class="pill">💬 Поддержка</a>
+        <button id="logoutBtn" class="pill" type="button">🚪 Выйти</button>
+      </nav>
+    </header>
+    
+    <div class="page-head">
+      <h1 class="page-title">Привет, <span class="grad" id="userName">пользователь</span>! 👋</h1>
+      <p class="page-sub">Управляйте балансом и заказами <span class="update-time" id="upd">🟢 Онлайн</span></p>
+    </div>
+
+    <section class="grid">
+      <article class="card c5">
+        <div class="card-head">
+          <div class="card-ico">👤</div>
+          <h2 class="card-title">Профиль</h2>
+        </div>
+        <div class="p-rows">
+          <div class="p-item">
+            <div class="p-label">📧 Email</div>
+            <div class="p-value" id="email">Загрузка...</div>
+          </div>
+          <div class="p-item">
+            <div class="p-label">💰 Баланс</div>
+            <div class="balance" id="bal">— ₽</div>
+          </div>
+          <div class="p-item">
+            <div class="p-label">🔗 Реферальная ссылка</div>
+            <div class="ref-box">
+              <div class="ref-wrap">
+                <input type="text" class="ref-input" id="refLink" value="Загрузка..." readonly onclick="this.select()"/>
+                <button id="copyBtn" class="copy-btn" type="button"><span id="copyTxt">📋 Скопировать</span></button>
+              </div>
+              <div class="ref-tip">💡 <b>Приглашайте друзей!</b> Получите 10% от каждого их заказа на свой баланс.</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card c7">
+        <div class="card-head">
+          <div class="card-ico green">💸</div>
+          <h2 class="card-title">Вывод средств</h2>
+        </div>
+        <div class="f-group">
+          <label class="f-label" for="wAmt">Сумма вывода (мин. 500 ₽)</label>
+          <input id="wAmt" class="f-input" type="number" min="500" placeholder="Введите сумму" inputmode="numeric"/>
+        </div>
+        <div class="f-group">
+          <label class="f-label" for="wNote">Реквизиты для перевода</label>
+          <textarea id="wNote" class="f-input" placeholder="Банк, номер карты, СБП или крипто-кошелёк..."></textarea>
+        </div>
+        <button id="wBtn" class="btn green" type="button">💰 Запросить вывод</button>
+      </article>
+
+      <article class="card c12">
+        <div class="card-head">
+          <div class="card-ico">📤</div>
+          <h2 class="card-title">Заявки на вывод</h2>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr><th>ID</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Реквизиты</th></tr></thead>
+              <tbody id="wTbl"><tr class="empty"><td colspan="5">⏳ Загрузка...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pag" id="wPag"></div>
+        </div>
+      </article>
+
+      <article class="card c12">
+        <div class="card-head">
+          <div class="card-ico">📊</div>
+          <h2 class="card-title">История баланса</h2>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr><th>Тип</th><th>Сумма</th><th>Детали</th><th>Дата</th></tr></thead>
+              <tbody id="txTbl"><tr class="empty"><td colspan="4">⏳ Загрузка...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pag" id="txPag"></div>
+        </div>
+      </article>
+
+      <article class="card c6">
+        <div class="card-head">
+          <div class="card-ico">👥</div>
+          <h2 class="card-title">Рефералы</h2>
+        </div>
+        <div class="stats" id="refStats"></div>
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr><th>Пользователь</th><th>Дата</th><th>Статус</th><th>Заработано</th></tr></thead>
+              <tbody id="refTbl"><tr class="empty"><td colspan="4">⏳ Загрузка...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pag" id="refPag"></div>
+        </div>
+      </article>
+
+      <article class="card c6">
+        <div class="card-head">
+          <div class="card-ico">🛒</div>
+          <h2 class="card-title">Заказы</h2>
+        </div>
+        <div class="stats" id="ordStats"></div>
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr><th>№ Заказа</th><th>Продукт</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr></thead>
+              <tbody id="ordTbl"><tr class="empty"><td colspan="5">⏳ Загрузка...</td></tr></tbody>
+            </table>
+          </div>
+          <div class="pag" id="ordPag"></div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <div id="toast"><p id="toastMsg"></p></div>
+
+  <script>
+    (function(){
+      const s = localStorage.getItem('theme');
+      if (s === 'light' || (!s && !matchMedia('(prefers-color-scheme:dark)').matches)) {
+        document.documentElement.setAttribute('data-theme','light');
+      }
+    })();
+
+    let csrf = '';
+    async function refreshCsrf(){
+      try {
+        const r = await fetch('/cabinet/csrf-token',{credentials:'include'});
+        const d = await r.json().catch(()=>({}));
+        if(d.csrf_token) csrf = d.csrf_token;
+      } catch(e){}
+      return csrf;
+    }
+    refreshCsrf();
+
+    const token = localStorage.getItem('cabinet_token');
+    if(!token) location.replace('/login');
+    const hdrs = {'Authorization':'Bearer '+token};
+
+    const PP = 10;
+    let D = {orders:[],refs:[],withdraws:[],tx:[]};
+    let pg = {orders:1,refs:1,withdraws:1,tx:1};
+
+    const $ = id => document.getElementById(id);
+    const dot = $('dot'), rBtn = $('refreshBtn');
+
+    function tr(m){
+      if(!m) return 'Неизвестная ошибка';
+      const t = {
+        'insufficient balance':'Недостаточно средств',
+        'minimum withdrawal':'Минимум 500 ₽',
+        'invalid credentials':'Неверный email или пароль',
+        'user not found':'Пользователь не найден',
+        'email already':'Email уже зарегистрирован',
+        'token expired':'Сессия истекла',
+        'invalid token':'Войдите снова',
+        'failed to fetch':'Нет интернета',
+        'network':'Ошибка сети',
+        'server error':'Ошибка сервера',
+        'internal':'Ошибка сервера'
+      };
+      const l = m.toLowerCase();
+      for(const[k,v] of Object.entries(t)) if(l.includes(k)) return v;
+      return m;
+    }
+
+    const thBtn = $('themeBtn');
+    function updTh(){
+      thBtn.textContent = document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙';
+    }
+    updTh();
+    thBtn.onclick = () => {
+      const l = document.documentElement.getAttribute('data-theme')==='light';
+      if(l) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme','light');
+      localStorage.setItem('theme', l?'dark':'light');
+      updTh();
+    };
+
+    function toast(txt,type=''){
+      const t = $('toast'), m = $('toastMsg');
+      m.textContent = txt;
+      t.className = type + ' show';
+      clearTimeout(toast.tid);
+      toast.tid = setTimeout(()=>{
+        t.className = type + ' hide';
+        setTimeout(()=>t.className='',400);
+      },4000);
+    }
+
+    function load(on){
+      dot.classList.toggle('active',on);
+      rBtn.classList.toggle('loading',on);
+    }
+
+    function out(){ localStorage.removeItem('cabinet_token'); location.replace('/login'); }
+    function mask(e){ if(!e||!e.includes('@')) return '***'; const[n,d]=e.split('@'); return (n.slice(0,2)||'*')+'***@'+d; }
+    function esc(v){ return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function rel(d){
+      try{
+        const df = Date.now() - new Date(d);
+        const m = Math.floor(df/60000), h = Math.floor(df/3600000), dy = Math.floor(df/86400000);
+        if(m<1) return 'Только что';
+        if(m<60) return m+' мин. назад';
+        if(h<24) return h+' ч. назад';
+        if(dy===1) return 'Вчера';
+        if(dy<7) return dy+' дн. назад';
+        return new Date(d).toLocaleDateString('ru-RU');
+      }catch{return '—';}
+    }
+    function st(s){
+      const m={new:['⏳ Новая','new'],pending:['⏳ В работе','pending'],approved:['✅ Одобрена','approved'],completed:['✅ Готово','completed'],paid:['✅ Оплачен','paid'],active:['✅ Активен','active'],rejected:['❌ Отклонена','rejected'],failed:['❌ Ошибка','failed']};
+      const[t,c]=m[s]||[s||'—','pending'];
+      return '<span class="st st-'+c+'">'+esc(t)+'</span>';
+    }
+    function txT(t){
+      const m={referral_bonus:'🎁 Реф. бонус',withdraw_pending:'📤 Холд',withdraw_done:'✅ Выплата',withdraw_rejected:'↩️ Возврат',bonus:'🎉 Бонус',refund:'↩️ Возврат'};
+      return m[t]||t;
+    }
+    function parseMeta(raw){
+      try{
+        const meta = JSON.parse(raw || '{}');
+        if(meta.order_id) return 'Заказ ' + String(meta.order_id).slice(0,8) + '...';
+        if(meta.withdraw_request_id) return 'Вывод #' + meta.withdraw_request_id;
+        if(meta.referral_id) return 'Реферал #' + meta.referral_id;
+      }catch(e){}
+      return '—';
+    }
+    window.cpyOid = async id => {
+      try{ await navigator.clipboard.writeText(id); toast('✓ ID скопирован','ok'); }
+      catch{ toast('ID: '+id); }
+    };
+
+    function pages(a){ return Math.ceil(a.length/PP); }
+    function slice(a,p){ return a.slice((p-1)*PP, p*PP); }
+    function pag(id,arr,p,fn){
+      const el = $(id), tot = pages(arr);
+      if(tot<=1){ el.style.display='none'; return; }
+      el.style.display='flex';
+      let nums='';
+      for(let i=1;i<=Math.min(tot,5);i++) nums+='<button class="pag-n'+(i===p?' on':'')+'" data-p="'+i+'">'+i+'</button>';
+      if(tot>5) nums+='<span class="pag-n dots">…</span>';
+      el.innerHTML='<div class="pag-info">Страница '+p+' из '+tot+'</div><div class="pag-ctrl"><button class="pag-btn" data-a="p"'+(p===1?' disabled':'')+'>← Назад</button><div class="pag-nums">'+nums+'</div><button class="pag-btn" data-a="n"'+(p===tot?' disabled':'')+'>Вперёд →</button></div>';
+      el.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>fn(+b.dataset.p));
+      el.querySelector('[data-a="p"]').onclick=()=>{if(p>1)fn(p-1);};
+      el.querySelector('[data-a="n"]').onclick=()=>{if(p<tot)fn(p+1);};
+    }
+
+    function rOrd(p=1){
+      const maxPage = Math.max(1, pages(D.orders));
+      if (p > maxPage) p = maxPage;
+      pg.orders=p;
+      const items=slice(D.orders,p), body=$('ordTbl');
+      const sum=D.orders.reduce((s,x)=>s+(x.amount||0),0);
+      $('ordStats').innerHTML=D.orders.length?'<div class="stat"><span class="stat-val">'+D.orders.length+'</span><span class="stat-lbl">заказов</span></div><div class="stat"><span class="stat-val">'+sum.toLocaleString('ru-RU')+' ₽</span><span class="stat-lbl">всего</span></div>':'';
+      body.innerHTML='';
+      if(!D.orders.length){ body.innerHTML='<tr class="empty"><td colspan="5">🛒 Заказов пока нет</td></tr>'; $('ordPag').style.display='none'; return; }
+      items.forEach(x=>{
+        const tr=document.createElement('tr');
+        const id=String(x.order_id||'—');
+        tr.innerHTML='<td><code class="oid" onclick="cpyOid(\''+esc(id)+'\')">'+esc(id)+'</code></td><td>'+esc(x.product||'—')+'</td><td><span class="amt">'+esc(x.amount||0)+' ₽</span></td><td>'+st(x.status)+'</td><td><span class="time">'+rel(x.created_at)+'</span></td>';
+        body.appendChild(tr);
+      });
+      pag('ordPag',D.orders,p,rOrd);
+    }
+
+    function rRef(p=1){
+      const maxPage = Math.max(1, pages(D.refs));
+      if (p > maxPage) p = maxPage;
+      pg.refs=p;
+      const items=slice(D.refs,p), body=$('refTbl');
+      const earn=D.refs.reduce((s,x)=>s+(x.total_earned||0),0);
+      $('refStats').innerHTML=D.refs.length?'<div class="stat"><span class="stat-val">'+D.refs.length+'</span><span class="stat-lbl">рефералов</span></div><div class="stat"><span class="stat-val">+'+earn.toLocaleString('ru-RU')+' ₽</span><span class="stat-lbl">заработано</span></div>':'';
+      body.innerHTML='';
+      if(!D.refs.length){ body.innerHTML='<tr class="empty"><td colspan="4">🔍 Рефералов пока нет</td></tr>'; $('refPag').style.display='none'; return; }
+      items.forEach(x=>{
+        const tr=document.createElement('tr');
+        const em=x.status==='anonymous'?'👤 Аноним':mask(x.email);
+        tr.innerHTML='<td>'+esc(em)+'</td><td><span class="time">'+rel(x.referred_at||x.created_at)+'</span></td><td>'+st(x.status||'active')+'</td><td><span class="amt amt-pos">+'+esc(x.total_earned||0)+' ₽</span></td>';
+        body.appendChild(tr);
+      });
+      pag('refPag',D.refs,p,rRef);
+    }
+
+    function rW(p=1){
+      const maxPage = Math.max(1, pages(D.withdraws));
+      if (p > maxPage) p = maxPage;
+      pg.withdraws=p;
+      const items=slice(D.withdraws,p), body=$('wTbl');
+      body.innerHTML='';
+      if(!D.withdraws.length){ body.innerHTML='<tr class="empty"><td colspan="5">📤 Заявок на вывод нет</td></tr>'; $('wPag').style.display='none'; return; }
+      items.forEach(x=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML='<td><span class="amt">#'+esc(x.id)+'</span></td><td><span class="amt">'+esc(x.amount)+' ₽</span></td><td>'+st(x.status)+'</td><td><span class="time">'+rel(x.created_at)+'</span></td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;color:var(--muted)">'+esc(x.note||'—')+'</td>';
+        body.appendChild(tr);
+      });
+      pag('wPag',D.withdraws,p,rW);
+    }
+
+    function rTx(p=1){
+      const maxPage = Math.max(1, pages(D.tx));
+      if (p > maxPage) p = maxPage;
+      pg.tx=p;
+      const items=slice(D.tx,p), body=$('txTbl');
+      body.innerHTML='';
+      if(!D.tx.length){ body.innerHTML='<tr class="empty"><td colspan="4">📊 Транзакций пока нет</td></tr>'; $('txPag').style.display='none'; return; }
+      items.forEach(x=>{
+        const tr=document.createElement('tr');
+        const pos=x.amount>=0;
+        tr.innerHTML='<td>'+txT(x.tx_type)+'</td><td><span class="amt '+(pos?'amt-pos':'amt-neg')+'">'+(pos?'+':'')+x.amount+' ₽</span></td><td style="max-width:100px;overflow:hidden;text-overflow:ellipsis;color:var(--muted)">'+esc(parseMeta(x.meta_json))+'</td><td><span class="time">'+rel(x.created_at)+'</span></td>';
+        body.appendChild(tr);
+      });
+      pag('txPag',D.tx,p,rTx);
+    }
+
+    async function api(url){
+      const r=await fetch(url,{headers:hdrs,credentials:'include'});
+      if(r.status===401) throw new Error('UNAUTH');
+      const d=await r.json().catch(()=>({}));
+      if(!r.ok) throw new Error(tr(d.detail||d.error||'Ошибка сервера'));
+      return d;
+    }
+
+    async function loadData(notify=false){
+      load(true);
+      await refreshCsrf();
+      const reqs = [
+        api('/cabinet/me'),
+        api('/cabinet/wallet'),
+        api('/cabinet/referrals'),
+        api('/cabinet/orders'),
+        api('/cabinet/withdrawals'),
+        api('/cabinet/wallet/history')
+      ];
+      const [meRes,walletRes,refsRes,ordersRes,withdrawsRes,txRes] = await Promise.allSettled(reqs);
+      try{
+        const allResults = [meRes, walletRes, refsRes, ordersRes, withdrawsRes, txRes];
+        const unauthCount = allResults.filter(
+          r => r.status === 'rejected' && r.reason && r.reason.message === 'UNAUTH'
+        ).length;
+        const meIsUnauth = meRes.status === 'rejected' && meRes.reason && meRes.reason.message === 'UNAUTH';
+        if (meIsUnauth || unauthCount >= 2) return out();
+
+        let hasFailed = false;
+
+        if (meRes.status === 'fulfilled') {
+          const me = meRes.value;
+          const em=me.user?.email||'—';
+          $('email').textContent=em;
+          $('userName').textContent=em.split('@')[0]||'пользователь';
+          const code=me.user?.ref_code||'';
+          $('refLink').value=code?'https://codenext.ru/?ref='+code:'Нет кода';
+        } else {
+          hasFailed = true;
+        }
+
+        if (walletRes.status === 'fulfilled') {
+          const wallet = walletRes.value;
+          const balEl=$('bal');
+          const nb=(wallet.balance||0).toLocaleString('ru-RU')+' ₽';
+          if(balEl.textContent!=='— ₽' && balEl.textContent!==nb){
+            balEl.classList.add('pop');
+            setTimeout(()=>balEl.classList.remove('pop'),400);
+          }
+          balEl.textContent=nb;
+        } else {
+          hasFailed = true;
+        }
+
+        if (refsRes.status === 'fulfilled') D.refs = refsRes.value.referrals || [];
+        else { D.refs = []; hasFailed = true; }
+
+        if (ordersRes.status === 'fulfilled') D.orders = ordersRes.value.orders || [];
+        else { D.orders = []; hasFailed = true; }
+
+        if (withdrawsRes.status === 'fulfilled') D.withdraws = withdrawsRes.value.withdrawals || [];
+        else { D.withdraws = []; hasFailed = true; }
+
+        if (txRes.status === 'fulfilled') D.tx = txRes.value.transactions || [];
+        else { D.tx = []; hasFailed = true; }
+
+        rRef(pg.refs); rOrd(pg.orders); rW(pg.withdraws); rTx(pg.tx);
+
+        $('upd').innerHTML='🟢 '+new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+        if (hasFailed && notify) toast('⚠️ Часть данных не загрузилась','err');
+        else if(notify) toast('✓ Данные обновлены','ok');
+      }catch(e){
+        if(e.message==='UNAUTH') return out();
+        toast('⚠️ '+e.message,'err');
+      }finally{ load(false); }
+    }
+
+    rBtn.onclick = () => loadData(true);
+
+    $('copyBtn').onclick = async () => {
+      const inp=$('refLink'), btn=$('copyBtn'), txt=$('copyTxt');
+      if(!inp.value||inp.value.includes('Загрузка')||inp.value.includes('Нет')){ 
+        toast('⚠️ Ссылка недоступна','err'); 
+        return; 
+      }
+      try{
+        await navigator.clipboard.writeText(inp.value);
+        btn.classList.add('done'); 
+        txt.textContent='✓ Скопировано!';
+        toast('✓ Реферальная ссылка скопирована','ok');
+        setTimeout(()=>{ btn.classList.remove('done'); txt.textContent='📋 Скопировать'; },2500);
+      }catch{ inp.select(); toast('Скопируйте вручную: Ctrl+C'); }
+    };
+
+    $('wBtn').onclick = async () => {
+      const amt=+$('wAmt').value||0, note=$('wNote').value.trim();
+      if(amt<500) return toast('⚠️ Минимальная сумма — 500 ₽','err');
+      if(!note) return toast('⚠️ Укажите реквизиты для перевода','err');
+      const btn=$('wBtn');
+      btn.disabled=true; btn.innerHTML='⏳ Отправка заявки...';
+      try{
+        await refreshCsrf();
+        const r=await fetch('/cabinet/withdraw-request',{
+          method:'POST',
+          headers:{'Content-Type':'application/json',...hdrs,'X-CSRF-Token':csrf},
+          body:JSON.stringify({amount:amt,note}),
+          credentials:'include'
+        });
+        if(r.status===401) return out();
+        const d=await r.json().catch(()=>({}));
+        if(!r.ok) throw new Error(tr(d.detail||d.error||'Ошибка'));
+        toast('✓ Заявка #'+d.withdraw_request_id+' успешно создана!','ok');
+        $('wAmt').value=''; $('wNote').value='';
+        loadData();
+      }catch(e){ toast('⚠️ '+e.message,'err'); }
+      finally{ btn.disabled=false; btn.innerHTML='💰 Запросить вывод'; }
+    };
+
+    $('logoutBtn').onclick = () => {
+      localStorage.removeItem('cabinet_token');
+      toast('✓ Вы вышли из аккаунта','ok');
+      setTimeout(()=>location.href='/login',600);
+    };
+
+    setInterval(()=>loadData(false), 120000);
+
+    loadData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Получение аккаунта | CodeNext</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+    <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #020617;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 40px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html.modal-open,
+        html.modal-open body {
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            padding-bottom: 80px;
+            line-height: 1.6;
+            color: var(--text);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        button, a {
+            touch-action: manipulation;
+        }
+
+        /* ===== ДИСКЛЕЙМЕР — УЛУЧШЕННЫЙ ===== */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            animation: fadeIn 0.4s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 24px;
+            padding-top: max(24px, env(safe-area-inset-top));
+            padding-bottom: max(40px, env(safe-area-inset-bottom));
+        }
+        
+        .disclaimer-overlay.hidden {
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .disclaimer-modal {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+            border-radius: 24px;
+            padding: 36px 28px;
+            max-width: 480px;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow), var(--glow);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            margin: auto 0;
+            flex-shrink: 0;
+        }
+
+        .disclaimer-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--warning), transparent);
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .disclaimer-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        
+        .disclaimer-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--warning), #ea580c);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            box-shadow: 0 16px 40px rgba(245, 158, 11, 0.35);
+            position: relative;
+        }
+        
+        .disclaimer-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        
+        .disclaimer-subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+        
+        /* Карточки условий */
+        .disclaimer-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        
+        .disclaimer-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.2s;
+        }
+        
+        .disclaimer-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        
+        .disclaimer-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .disclaimer-card-icon.shield {
+            background: rgba(16, 185, 129, 0.15);
+        }
+        
+        .disclaimer-card-icon.support {
+            background: rgba(99, 102, 241, 0.15);
+        }
+        
+        .disclaimer-card-icon.fast {
+            background: rgba(251, 191, 36, 0.15);
+        }
+        
+        .disclaimer-card-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .disclaimer-card-title {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        
+        .disclaimer-card-text {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .disclaimer-card-text .highlight {
+            color: var(--success);
+            font-weight: 500;
+        }
+        
+        .disclaimer-card-text .warning {
+            color: var(--warning);
+            font-weight: 500;
+        }
+        
+        .accept-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            border: none;
+            padding: 18px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            min-height: 56px;
+        }
+
+        .accept-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .accept-btn:hover::before {
+            left: 100%;
+        }
+        
+        .accept-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6);
+        }
+        
+        .accept-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* ===== ПОПАП ОТЗЫВА ===== */
+        .review-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .review-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .review-modal {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+            border-radius: 24px;
+            padding: 36px 28px;
+            max-width: 420px;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow), 0 0 60px rgba(251, 191, 36, 0.15);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .review-overlay.show .review-modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        .review-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+        }
+        
+        .review-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .review-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        
+        .review-stars {
+            font-size: 48px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.4));
+            animation: starPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes starPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .review-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        
+        .review-text {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+        
+        .review-text strong {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        
+        .review-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .review-btn-primary {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #000;
+            border: none;
+            padding: 18px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+            min-height: 56px;
+        }
+        
+        .review-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(251, 191, 36, 0.5);
+        }
+        
+        .review-btn-primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .review-btn-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 48px;
+        }
+        
+        .review-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .review-note {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .review-note-icon {
+            font-size: 16px;
+        }
+
+        /* ===== ПЛАВАЮЩАЯ ПОДСКАЗКА ===== */
+        .scroll-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            padding: 16px 28px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .scroll-hint.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .scroll-hint:hover {
+            transform: translateX(-50%) translateY(-4px);
+            box-shadow: 0 25px 60px rgba(99, 102, 241, 0.7);
+        }
+        
+        .scroll-hint-icon {
+            font-size: 20px;
+            animation: bounceDown 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
+        
+        .scroll-hint-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+        
+        .scroll-hint-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(90deg);
+        }
+
+        /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
+        .container {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 48px 32px;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid var(--border);
+            text-align: center;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        }
+        
+        .container.active {
+            opacity: 1;
+            pointer-events: auto;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+            position: relative;
+            margin: 0 auto 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent 60%);
+            z-index: 0;
+        }
+        
+        .logo span {
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 36px;
+            font-size: 17px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            border: none;
+            padding: 20px 48px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-height: 56px;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ===== РЕЗУЛЬТАТ ===== */
+        .result {
+            display: none;
+            margin-top: 36px;
+            text-align: left;
+        }
+        
+        .result.show {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .result-title {
+            color: var(--success);
+            font-size: 18px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .result-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        
+        .data-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .data-row {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .data-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(4px);
+        }
+        
+        .data-info {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .data-label {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .data-value {
+            color: #fff;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 15px;
+            word-break: break-all;
+            line-height: 1.5;
+            font-weight: 500;
+            -webkit-user-select: all;
+            user-select: all;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .data-info:hover .data-value {
+            color: #a5b4fc;
+        }
+        
+        /* Подсказка при наведении на текст */
+        .data-info::after {
+            content: 'Нажмите, чтобы скопировать';
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .data-row:hover .data-info::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .copy-field-btn {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .copy-field-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+            transform: scale(1.1);
+            color: #fff;
+        }
+        
+        .copy-field-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .copy-field-btn.copied {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+        
+        .copy-all-btn {
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: #fff;
+            border: none;
+            padding: 18px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-height: 56px;
+        }
+        
+        .copy-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4);
+        }
+        
+        .copy-all-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .copy-all-btn.copied {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+        
+        .error {
+            color: #fca5a5;
+            margin-top: 24px;
+            display: none;
+            padding: 18px 24px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 14px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            font-size: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .error.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .loader {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 32px auto;
+        }
+        
+        .loader.show {
+            display: block;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== ИНСТРУКЦИЯ ===== */
+        .instruction {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 40px 32px;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid var(--border);
+            margin-top: 24px;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .instruction::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        }
+        
+        .instruction.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .instruction-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .instruction-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px;
+            box-shadow: 0 16px 40px rgba(59, 130, 246, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .instruction-title {
+            color: #fff;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        
+        /* VPN Баннер */
+        .vpn-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vpn-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--danger), transparent);
+            opacity: 0.5;
+        }
+        
+        .vpn-banner-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .vpn-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .vpn-title {
+            color: #f87171;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .vpn-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        
+        /* Гарантия */
+        .guarantee-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guarantee-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--success), transparent);
+            opacity: 0.5;
+        }
+        
+        .guarantee-icon {
+            font-size: 36px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 12px rgba(16, 185, 129, 0.4));
+        }
+        
+        .guarantee-text {
+            color: #6ee7b7;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+        
+        /* Секции */
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title .emoji {
+            font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        /* Ссылки */
+        .links-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .link-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            min-height: 56px;
+        }
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .link-card:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateX(8px);
+        }
+
+        .link-card:hover::before {
+            opacity: 1;
+        }
+
+        .link-card:active {
+            transform: translateX(4px) scale(0.98);
+        }
+        
+        .link-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .link-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .link-name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .link-url {
+            color: var(--text-muted);
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .link-arrow {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .link-card:hover .link-arrow {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+        
+        /* Шаги */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .step:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .step-title {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .step-content {
+            padding-left: 56px;
+        }
+        
+        .step-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .step-list li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
+            line-height: 1.7;
+            padding-left: 28px;
+            position: relative;
+        }
+        
+        .step-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .step-list li strong {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        
+        .step-highlight {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            color: #fcd34d;
+            font-size: 14px;
+            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .step-highlight-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        /* Видео */
+        .video-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            min-height: 56px;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(239,68,68,0.5), transparent);
+        }
+        
+        .video-card:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+            transform: scale(1.02);
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .video-card:active {
+            transform: scale(0.98);
+        }
+        
+        .video-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            box-shadow: 0 12px 30px rgba(239, 68, 68, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .video-info {
+            flex: 1;
+        }
+        
+        .video-title {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .video-subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        /* Важно */
+        .important-section {
+            background: rgba(251, 191, 36, 0.05);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 20px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .important-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--warning), transparent);
+            opacity: 0.5;
+        }
+        
+        .important-title {
+            color: #fbbf24;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .important-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .important-list li {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            line-height: 1.7;
+            padding: 12px 16px;
+            padding-left: 44px;
+            position: relative;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .important-list li::before {
+            content: "⚠️";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+        
+        .important-list li strong {
+            color: #f87171;
+            font-weight: 600;
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        
+        @media (min-width: 768px) {
+            body {
+                padding: 40px;
+                padding-bottom: 100px;
+            }
+            
+            .disclaimer-modal {
+                padding: 44px 36px;
+                max-width: 520px;
+            }
+            
+            .disclaimer-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
+            }
+            
+            .disclaimer-title {
+                font-size: 28px;
+            }
+            
+            .disclaimer-card {
+                padding: 20px 22px;
+            }
+            
+            .disclaimer-card-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+            
+            .disclaimer-card-title {
+                font-size: 16px;
+            }
+            
+            .disclaimer-card-text {
+                font-size: 14px;
+            }
+            
+            .accept-btn {
+                padding: 20px 48px;
+                font-size: 17px;
+            }
+            
+            .review-modal {
+                padding: 44px 36px;
+                max-width: 460px;
+            }
+            
+            .review-stars {
+                font-size: 56px;
+            }
+            
+            .review-title {
+                font-size: 28px;
+            }
+            
+            .review-text {
+                font-size: 16px;
+            }
+            
+            .scroll-hint {
+                padding: 18px 36px;
+                font-size: 16px;
+                bottom: 40px;
+            }
+            
+            .container,
+            .instruction {
+                padding: 56px 48px;
+                max-width: 680px;
+            }
+            
+            .logo {
+                width: 88px;
+                height: 88px;
+                font-size: 36px;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .btn {
+                padding: 22px 56px;
+                font-size: 18px;
+            }
+            
+            .result-card {
+                padding: 28px;
+            }
+            
+            .data-row {
+                padding: 20px 24px;
+            }
+            
+            .data-label {
+                font-size: 13px;
+            }
+            
+            .data-value {
+                font-size: 16px;
+            }
+            
+            .copy-field-btn {
+                width: 52px;
+                height: 52px;
+                font-size: 22px;
+            }
+            
+            .copy-all-btn {
+                padding: 20px 36px;
+                font-size: 17px;
+            }
+            
+            .instruction-icon {
+                width: 72px;
+                height: 72px;
+                font-size: 36px;
+            }
+            
+            .instruction-title {
+                font-size: 28px;
+            }
+            
+            .vpn-banner {
+                padding: 28px;
+            }
+            
+            .vpn-title {
+                font-size: 20px;
+            }
+            
+            .vpn-text {
+                font-size: 16px;
+            }
+            
+            .guarantee-text {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+            
+            .link-card {
+                padding: 20px 24px;
+            }
+            
+            .link-name {
+                font-size: 17px;
+            }
+            
+            .step {
+                padding: 28px;
+            }
+            
+            .step-number {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .step-title {
+                font-size: 19px;
+            }
+            
+            .step-content {
+                padding-left: 60px;
+            }
+            
+            .step-list li {
+                font-size: 16px;
+            }
+            
+            .video-card {
+                padding: 28px;
+            }
+            
+            .video-icon {
+                width: 72px;
+                height: 72px;
+                font-size: 32px;
+            }
+            
+            .video-title {
+                font-size: 18px;
+            }
+            
+            .video-subtitle {
+                font-size: 15px;
+            }
+            
+            .important-section {
+                padding: 28px;
+            }
+            
+            .important-title {
+                font-size: 19px;
+            }
+            
+            .important-list li {
+                font-size: 15px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .disclaimer-modal {
+                max-width: 560px;
+            }
+            
+            .container,
+            .instruction {
+                max-width: 720px;
+            }
+            
+            .links-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+                padding-bottom: 60px;
+            }
+
+            .disclaimer-overlay {
+                padding: 16px;
+                padding-top: max(16px, env(safe-area-inset-top));
+                padding-bottom: max(32px, env(safe-area-inset-bottom));
+            }
+            
+            .disclaimer-modal {
+                padding: 24px 18px;
+                border-radius: 20px;
+            }
+            
+            .disclaimer-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 28px;
+                margin-bottom: 16px;
+            }
+            
+            .disclaimer-title {
+                font-size: 20px;
+            }
+            
+            .disclaimer-subtitle {
+                font-size: 14px;
+            }
+            
+            .disclaimer-cards {
+                gap: 10px;
+                margin-bottom: 24px;
+            }
+            
+            .disclaimer-card {
+                padding: 14px 16px;
+                gap: 12px;
+            }
+            
+            .disclaimer-card-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            
+            .disclaimer-card-title {
+                font-size: 14px;
+            }
+            
+            .disclaimer-card-text {
+                font-size: 12px;
+            }
+            
+            .accept-btn {
+                padding: 16px 24px;
+                font-size: 15px;
+            }
+            
+            .review-modal {
+                padding: 28px 20px;
+                border-radius: 20px;
+            }
+            
+            .review-close {
+                top: 12px;
+                right: 12px;
+                width: 32px;
+                height: 32px;
+            }
+            
+            .review-stars {
+                font-size: 40px;
+                margin-bottom: 16px;
+            }
+            
+            .review-title {
+                font-size: 22px;
+            }
+            
+            .review-text {
+                font-size: 14px;
+                margin-bottom: 24px;
+            }
+            
+            .review-btn-primary {
+                padding: 16px 24px;
+                font-size: 15px;
+            }
+            
+            .review-btn-secondary {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .review-note {
+                font-size: 12px;
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+            
+            .scroll-hint {
+                padding: 14px 20px;
+                font-size: 14px;
+                bottom: 16px;
+                max-width: 90%;
+            }
+            
+            .scroll-hint-close {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .container,
+            .instruction {
+                padding: 28px 20px;
+                border-radius: 24px;
+            }
+            
+            .logo {
+                width: 64px;
+                height: 64px;
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .subtitle {
+                font-size: 15px;
+                margin-bottom: 28px;
+            }
+            
+            .btn {
+                padding: 18px 32px;
+                font-size: 16px;
+            }
+            
+            .result-card {
+                padding: 20px;
+            }
+            
+            .data-row {
+                padding: 16px;
+                gap: 12px;
+            }
+            
+            .data-label {
+                font-size: 11px;
+            }
+            
+            .data-value {
+                font-size: 14px;
+            }
+            
+            .data-info::after {
+                display: none;
+            }
+            
+            .copy-field-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+            
+            .copy-all-btn {
+                padding: 16px 24px;
+                font-size: 15px;
+            }
+            
+            .instruction-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 28px;
+            }
+            
+            .instruction-title {
+                font-size: 22px;
+            }
+            
+            .vpn-banner {
+                padding: 20px;
+            }
+            
+            .vpn-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 22px;
+            }
+            
+            .vpn-title {
+                font-size: 16px;
+            }
+            
+            .vpn-text {
+                font-size: 14px;
+            }
+            
+            .guarantee-banner {
+                padding: 20px;
+                gap: 12px;
+            }
+            
+            .guarantee-icon {
+                font-size: 32px;
+            }
+            
+            .guarantee-text {
+                font-size: 14px;
+            }
+            
+            .section-title {
+                font-size: 17px;
+            }
+            
+            .link-card {
+                padding: 16px;
+            }
+            
+            .link-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            
+            .link-name {
+                font-size: 15px;
+            }
+            
+            .link-url {
+                font-size: 12px;
+            }
+            
+            .step {
+                padding: 20px;
+            }
+            
+            .step-number {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .step-title {
+                font-size: 16px;
+            }
+            
+            .step-content {
+                padding-left: 0;
+                margin-top: 12px;
+            }
+            
+            .step-list li {
+                font-size: 14px;
+            }
+            
+            .step-highlight {
+                padding: 14px;
+                font-size: 13px;
+            }
+            
+            .video-card {
+                padding: 20px;
+            }
+            
+            .video-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            
+            .video-title {
+                font-size: 16px;
+            }
+            
+            .video-subtitle {
+                font-size: 13px;
+            }
+            
+            .important-section {
+                padding: 20px;
+            }
+            
+            .important-title {
+                font-size: 16px;
+            }
+            
+            .important-list li {
+                font-size: 13px;
+                padding-left: 40px;
+            }
+        }
+
+        .vpn-recommend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.vpn-recommend:hover {
+    background: rgba(16, 185, 129, 0.18);
+    border-color: rgba(16, 185, 129, 0.4);
+    transform: translateX(4px);
+}
+
+.vpn-recommend-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.vpn-recommend-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.vpn-recommend-title {
+    color: #6ee7b7;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.vpn-recommend-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.vpn-recommend-arrow {
+    color: rgba(110, 231, 183, 0.5);
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.vpn-recommend:hover .vpn-recommend-arrow {
+    color: #6ee7b7;
+    transform: translateX(4px);
+}
+        
+        @media (max-height: 600px) and (orientation: landscape) {
+            .disclaimer-overlay {
+                padding: 16px;
+            }
+            
+            .disclaimer-modal {
+                padding: 20px;
+            }
+            
+            .disclaimer-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+                margin-bottom: 12px;
+            }
+            
+            .disclaimer-title {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+            
+            .disclaimer-subtitle {
+                font-size: 13px;
+            }
+
+            .disclaimer-cards {
+                margin-bottom: 16px;
+            }
+
+            .disclaimer-card {
+                padding: 10px 12px;
+            }
+            
+            .review-modal {
+                padding: 24px;
+            }
+            
+            .review-stars {
+                font-size: 36px;
+                margin-bottom: 12px;
+            }
+            
+            .review-title {
+                font-size: 20px;
+            }
+        }
+        
+        /* Скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Safe areas */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(16px, env(safe-area-inset-left));
+                padding-right: max(16px, env(safe-area-inset-right));
+                padding-bottom: max(80px, env(safe-area-inset-bottom));
+            }
+            
+            .scroll-hint {
+                bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px));
+            }
+        }
+        /* ===== VPN РЕКЛАМА ===== */
+.vpn-recommend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.08));
+    border: 2px solid rgba(34, 211, 238, 0.4);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.vpn-recommend::before {
+    content: '🔥 HOT';
+    position: absolute;
+    top: 0;
+    right: 16px;
+    background: linear-gradient(135deg, #22d3ee, #0891b2);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: 0.5px;
+}
+
+.vpn-recommend:hover {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(6, 182, 212, 0.15));
+    border-color: rgba(34, 211, 238, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(34, 211, 238, 0.2);
+}
+
+.vpn-recommend-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #22d3ee, #06b6d4);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(34, 211, 238, 0.4);
+}
+
+.vpn-recommend-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.vpn-recommend-title {
+    color: #67e8f9;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.vpn-recommend-text {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.vpn-recommend-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.vpn-tag {
+    background: rgba(34, 211, 238, 0.15);
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: #67e8f9;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.vpn-recommend-arrow {
+    color: #67e8f9;
+    font-size: 24px;
+    transition: transform 0.3s;
+    opacity: 0.7;
+}
+
+.vpn-recommend:hover .vpn-recommend-arrow {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+@media (max-width: 480px) {
+    .vpn-recommend {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 16px 20px;
+        gap: 12px;
+    }
+    
+    .vpn-recommend::before {
+        right: 12px;
+        transform: none;
+    }
+    
+    .vpn-recommend-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 26px;
+    }
+    
+    .vpn-recommend-title {
+        font-size: 16px;
+    }
+    
+    .vpn-recommend-text {
+        font-size: 13px;
+    }
+    
+    .vpn-recommend-features {
+        justify-content: center;
+    }
+    
+    .vpn-tag {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
+    .vpn-recommend-arrow {
+        display: none;
+    }
+}
+    
+    .disclaimer-overlay{display:none !important;}
+</style>
+</head>
+<body>
+    <!-- ДИСКЛЕЙМЕР — УЛУЧШЕННЫЙ -->
+    <div class="disclaimer-overlay" id="disclaimerOverlay">
+        <div class="disclaimer-modal">
+            <div class="disclaimer-header">
+                <div class="disclaimer-icon">🛡️</div>
+                <h2 class="disclaimer-title">Условия использования</h2>
+                <p class="disclaimer-subtitle">Ознакомьтесь перед получением аккаунта</p>
+            </div>
+            
+            <div class="disclaimer-cards">
+                <div class="disclaimer-card">
+                    <div class="disclaimer-card-icon shield">🛡️</div>
+                    <div class="disclaimer-card-content">
+                        <div class="disclaimer-card-title">Гарантия на весь срок подписки</div>
+                        <div class="disclaimer-card-text">Аккаунт защищён <span class="highlight">гарантией</span> с момента покупки до окончания срока действия подписки</div>
+                    </div>
+                </div>
+                
+                <div class="disclaimer-card">
+                    <div class="disclaimer-card-icon support">💬</div>
+                    <div class="disclaimer-card-content">
+                        <div class="disclaimer-card-title">Поддержка при проблемах</div>
+                        <div class="disclaimer-card-text">Если аккаунт <span class="warning">заблокируют или удалят</span> — напишите в чат по заказу</div>
+                    </div>
+                </div>
+                
+                <div class="disclaimer-card">
+                    <div class="disclaimer-card-icon fast">⚡</div>
+                    <div class="disclaimer-card-content">
+                        <div class="disclaimer-card-title">Быстрая замена</div>
+                        <div class="disclaimer-card-text">Оперативно заменим аккаунт или решим любой вопрос</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="accept-btn" onclick="acceptDisclaimer()">
+                ✅ Понятно, продолжить
+            </button>
+        </div>
+    </div>
+
+    <!-- ПОПАП ОТЗЫВА -->
+    <div class="review-overlay" id="reviewOverlay">
+        <div class="review-modal">
+            <button class="review-close" onclick="closeReviewPopup()">✕</button>
+            <div class="review-stars">⭐️⭐️⭐️⭐️⭐️</div>
+            <h3 class="review-title">Вам понравилось?</h3>
+            <p class="review-text">
+                Мы рады, что всё получилось! 🎉<br>
+                Если у вас есть минутка — <strong>оставьте отзыв</strong> на Яндекс.Маркете. Это очень помогает нам развиваться!
+            </p>
+            <div class="review-buttons">
+                <a href="https://market.yandex.ru/my/tasks" target="_blank" rel="noopener noreferrer" class="review-btn-primary" onclick="closeReviewPopup()">
+                    ⭐ Оставить отзыв
+                </a>
+                <button class="review-btn-secondary" onclick="closeReviewPopup()">
+                    Может быть позже
+                </button>
+            </div>
+            <div class="review-note">
+                <span class="review-note-icon">💜</span>
+                <span>Спасибо, что выбрали нас!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПЛАВАЮЩАЯ ПОДСКАЗКА -->
+    <div class="scroll-hint" id="scrollHint" onclick="scrollToInstruction()">
+        <span class="scroll-hint-icon">👇</span>
+        <span>Инструкция по входу ниже</span>
+        <button class="scroll-hint-close" onclick="hideScrollHint(event)">✕</button>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div class="container" id="mainContainer">
+        <div class="logo"><span>CN</span></div>
+        <h1>ChatGPT Plus — Новый аккаунт</h1>
+        <p class="subtitle">Нажмите кнопку для получения данных аккаунта</p>
+        
+        <button class="btn" id="getBtn" onclick="getAccount()">Получить аккаунт</button>
+        
+        <div class="loader" id="loader"></div>
+        
+        <div class="result" id="result">
+            <div class="result-title">
+                <span>✅</span> Ваш аккаунт готов
+            </div>
+            <div class="result-card">
+                <div class="data-fields" id="dataFields"></div>
+            </div>
+            <button class="copy-all-btn" id="copyAllBtn" onclick="copyAll()">
+                <span>📋</span> Скопировать всё
+            </button>
+        </div>
+        
+        <div class="error" id="error"></div>
+    </div>
+
+    <!-- ИНСТРУКЦИЯ -->
+    <div class="instruction" id="instruction">
+        <div class="instruction-header">
+            <div class="instruction-icon">📖</div>
+            <h2 class="instruction-title">Инструкция по авторизации</h2>
+        </div>
+        
+     <div class="vpn-banner">
+    <div class="vpn-banner-header">
+        <div class="vpn-icon">🔒</div>
+        <div class="vpn-title">Требуется VPN!</div>
+    </div>
+    <p class="vpn-text">
+        Для работы ChatGPT необходим VPN. Подключитесь к серверу за пределами РФ.
+    </p>
+    <a href="https://hynet.space/?r=520612044525" target="_blank" rel="noopener noreferrer" class="vpn-recommend">
+        <div class="vpn-recommend-icon">⚡</div>
+        <div class="vpn-recommend-content">
+            <div class="vpn-recommend-title">HyNet Space — Личный сервер</div>
+            <div class="vpn-recommend-text">Быстрый и стабильный VPN для ChatGPT. Работает без сбоев!</div>
+            <div class="vpn-recommend-features">
+                <span class="vpn-tag">🚀 Высокая скорость</span>
+                <span class="vpn-tag">🌍 50+ стран</span>
+                <span class="vpn-tag">🔒 6+ протоколов</span>
+            </div>
+        </div>
+        <div class="vpn-recommend-arrow">→</div>
+    </a>
+</div>
+        
+        <div class="guarantee-banner">
+            <div class="guarantee-icon">🛡️</div>
+            <div class="guarantee-text">
+                Гарантия 1 месяц — бесплатная замена аккаунта в случае возникновения проблем
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">
+                <span class="emoji">🌐</span> Сайты для авторизации
+            </h3>
+            <div class="links-grid">
+                <a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer" class="link-card">
+                    <div class="link-icon">💬</div>
+                    <div class="link-info">
+                        <div class="link-name">ChatGPT</div>
+                        <div class="link-url">chatgpt.com</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://login.live.com" target="_blank" rel="noopener noreferrer" class="link-card">
+                    <div class="link-icon">🔐</div>
+                    <div class="link-info">
+                        <div class="link-name">Microsoft Login</div>
+                        <div class="link-url">login.live.com</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+                <a href="https://outlook.live.com/mail/0" target="_blank" rel="noopener noreferrer" class="link-card">
+                    <div class="link-icon">📧</div>
+                    <div class="link-info">
+                        <div class="link-name">Outlook Почта</div>
+                        <div class="link-url">outlook.live.com</div>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">
+                <span class="emoji">📝</span> Пошаговая инструкция
+            </h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Вход в почту Outlook</div>
+                    </div>
+                    <div class="step-content">
+                        <ul class="step-list">
+                            <li>Перейдите на сайт <strong>outlook.live.com</strong> или <strong>login.live.com</strong></li>
+                            <li>Войдите в почтовый аккаунт, данные от которого вы получили выше</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Вход в аккаунт ChatGPT</div>
+                    </div>
+                    <div class="step-content">
+                        <ul class="step-list">
+                            <li>Перейдите на сайт <strong>chatgpt.com</strong></li>
+                            <li>Нажмите кнопку <strong>«Войти»</strong></li>
+                            <li>Выберите вход <strong>через электронную почту</strong></li>
+                            <li>Введите адрес почты Outlook, который вам выдали</li>
+                            <li>Подтвердите вход кодом, который придёт на почту</li>
+                        </ul>
+                        <div class="step-highlight">
+                            <span class="step-highlight-icon">💡</span>
+                            <span>Проверьте папку «Спам» — письмо с кодом может попасть туда!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">
+                <span class="emoji">🎬</span> Видео-инструкция
+            </h3>
+            <a href="https://disk.yandex.ru/i/tu7D-GtWraXHRg" target="_blank" rel="noopener noreferrer" class="video-card">
+                <div class="video-icon">▶️</div>
+                <div class="video-info">
+                    <div class="video-title">Смотреть видео</div>
+                    <div class="video-subtitle">Подробная инструкция по авторизации</div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="section">
+            <div class="important-section">
+                <div class="important-title">
+                    <span>⚠️</span> Важно
+                </div>
+                <ul class="important-list">
+                    <li>Если используете ChatGPT на разных устройствах, рекомендуется включать <strong>VPN из одной локации</strong></li>
+                    <li>Если возникнут сложности — напишите в чат по заказу, мы обязательно поможем</li>
+                    <li><strong>Соблюдайте правила OpenAI:</strong> вход с разных IP-адресов и совместное использование аккаунта запрещено</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<script>
+    let originalAccountData = '';
+    let parsedFields = [];
+    let reviewShown = false;
+    let reviewTimeout = null;
+    
+    // ===== CSRF ИНИЦИАЛИЗАЦИЯ =====
+    let csrfToken = '';
+    let csrfReady = false;
+
+    (async function initCsrf() {
+        try {
+            const r = await fetch('/cabinet/csrf-token', { credentials: 'include' });
+            const d = await r.json().catch(() => ({}));
+            if (d && d.csrf_token) {
+                csrfToken = d.csrf_token;
+                csrfReady = true;
+            }
+        } catch (e) {
+            console.warn('CSRF init failed:', e);
+            setTimeout(async () => {
+                try {
+                    const r = await fetch('/cabinet/csrf-token', { credentials: 'include' });
+                    const d = await r.json().catch(() => ({}));
+                    if (d && d.csrf_token) {
+                        csrfToken = d.csrf_token;
+                        csrfReady = true;
+                    }
+                } catch (e2) {
+                    console.warn('CSRF retry failed:', e2);
+                }
+            }, 1000);
+        }
+    })();
+
+
+    // ===== ФУНКЦИИ ПОПАПА ОТЗЫВА =====
+    function showReviewPopup() {
+        if (reviewShown) return;
+        reviewShown = true;
+        
+        const overlay = document.getElementById('reviewOverlay');
+        overlay.classList.add('show');
+        }
+    
+    function closeReviewPopup() {
+        const overlay = document.getElementById('reviewOverlay');
+        overlay.classList.remove('show');
+        document.documentElement.classList.remove('modal-open');
+    }
+    
+    // Показываем попап через 1 секунду после любого копирования
+    function triggerReviewPopup() {
+        if (reviewShown) return;
+        
+        // Сбрасываем предыдущий таймер если есть
+        if (reviewTimeout) {
+            clearTimeout(reviewTimeout);
+        }
+        
+        // Показываем через 1 секунду
+        reviewTimeout = setTimeout(() => {
+            showReviewPopup();
+        }, 1000);
+    }
+
+    function acceptDisclaimer() {
+        const overlay = document.getElementById('disclaimerOverlay');
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            overlay.style.opacity = '';
+            overlay.style.transition = '';
+            document.documentElement.classList.remove('modal-open');
+        }, 300);
+
+        setTimeout(() => {
+            document.getElementById('mainContainer').classList.add('active');
+        }, 200);
+
+        setTimeout(() => {
+            document.getElementById('instruction').classList.add('active');
+        }, 400);
+        
+        setTimeout(() => {
+            const instruction = document.getElementById('instruction');
+            const rect = instruction.getBoundingClientRect();
+            if (rect.top > window.innerHeight * 0.8) {
+                document.getElementById('scrollHint').classList.add('show');
+            }
+        }, 3000);
+        
+        setTimeout(() => {
+            hideScrollHint();
+        }, 12000);
+    }
+
+    function scrollToInstruction() {
+        document.getElementById('instruction').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+        hideScrollHint();
+    }
+
+    function hideScrollHint(event) {
+        if (event) {
+            event.stopPropagation();
+        }
+        document.getElementById('scrollHint').classList.remove('show');
+    }
+
+    window.addEventListener('scroll', () => {
+        const scrollHint = document.getElementById('scrollHint');
+        const instruction = document.getElementById('instruction');
+        
+        if (instruction && scrollHint.classList.contains('show')) {
+            const instructionRect = instruction.getBoundingClientRect();
+            if (instructionRect.top < window.innerHeight * 0.8) {
+                hideScrollHint();
+            }
+        }
+    }, { passive: true });
+
+    function getToken() {
+        const path = window.location.pathname;
+        const parts = path.split('/');
+        return parts[parts.length - 1];
+    }
+
+    function parseAccountData(data) {
+        const fields = [];
+        const parts = data.split('|').map(p => p.trim()).filter(p => p);
+        
+        parts.forEach(part => {
+            const colonIndex = part.indexOf(':');
+            if (colonIndex !== -1) {
+                const label = part.substring(0, colonIndex).trim();
+                const value = part.substring(colonIndex + 1).trim();
+                fields.push({ label, value });
+            } else {
+                fields.push({ label: 'Данные', value: part });
+            }
+        });
+        
+        if (fields.length === 0) {
+            fields.push({ label: 'Данные аккаунта', value: data });
+        }
+        
+        return fields;
+    }
+
+    function createFieldsHTML(fields) {
+        return fields.map((field, index) => `
+            <div class="data-row">
+                <div class="data-info" onclick="copyFieldByClick(${index})">
+                    <div class="data-label">${escapeHtml(field.label)}</div>
+                    <div class="data-value">${escapeHtml(field.value)}</div>
+                </div>
+                <button class="copy-field-btn" onclick="copyField(${index})" title="Скопировать">
+                    📋
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function displayAccount(accountString) {
+        originalAccountData = accountString;
+        parsedFields = parseAccountData(accountString);
+        document.getElementById('dataFields').innerHTML = createFieldsHTML(parsedFields);
+    }
+
+    async function getAccount() {
+        const btn = document.getElementById('getBtn');
+        const loader = document.getElementById('loader');
+        const result = document.getElementById('result');
+        const error = document.getElementById('error');
+        
+        if (!csrfReady) {
+            error.textContent = 'Подождите секунду, идёт инициализация...';
+            error.classList.add('show');
+            setTimeout(() => {
+                error.classList.remove('show');
+                if (csrfReady) {
+                    getAccount();
+                }
+            }, 500);
+            return;
+        }
+        
+        btn.disabled = true;
+        btn.style.display = 'none';
+        loader.classList.add('show');
+        error.classList.remove('show');
+        
+        try {
+            const response = await fetch('/get-account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
+                body: JSON.stringify({ token: getToken() }),
+                credentials: 'include'
+            });
+            
+            const data = await response.json();
+            
+            loader.classList.remove('show');
+            
+            if (data.status === 'ok') {
+                displayAccount(data.account);
+                result.classList.add('show');
+                setTimeout(() => {
+                    result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } else {
+                error.textContent = data.error || 'Произошла ошибка';
+                error.classList.add('show');
+                btn.style.display = 'block';
+                btn.disabled = false;
+            }
+        } catch (e) {
+            loader.classList.remove('show');
+            error.textContent = 'Ошибка соединения. Попробуйте ещё раз.';
+            error.classList.add('show');
+            btn.style.display = 'block';
+            btn.disabled = false;
+        }
+    }
+
+    // Копирование при клике на текст данных
+    function copyFieldByClick(index) {
+        const field = parsedFields[index];
+        if (!field) return;
+        
+        const textToCopy = field.value;
+        const rows = document.querySelectorAll('.data-row');
+        const row = rows[index];
+        const btn = row.querySelector('.copy-field-btn');
+        
+        copyToClipboard(textToCopy, () => {
+            // Визуальный фидбек
+            btn.textContent = '✓';
+            btn.classList.add('copied');
+            
+            // Мигание строки
+            row.style.background = 'rgba(16, 185, 129, 0.15)';
+            row.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+            
+            setTimeout(() => {
+                btn.textContent = '📋';
+                btn.classList.remove('copied');
+                row.style.background = '';
+                row.style.borderColor = '';
+            }, 1500);
+            
+            // Триггерим попап отзыва
+            triggerReviewPopup();
+        });
+    }
+
+    // Копирование по кнопке
+    function copyField(index) {
+        const field = parsedFields[index];
+        if (!field) return;
+        
+        const textToCopy = field.value;
+        const buttons = document.querySelectorAll('.copy-field-btn');
+        const btn = buttons[index];
+        
+        copyToClipboard(textToCopy, () => {
+            btn.textContent = '✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = '📋';
+                btn.classList.remove('copied');
+            }, 1500);
+            
+            // Триггерим попап отзыва
+            triggerReviewPopup();
+        });
+    }
+
+    function copyAll() {
+        const btn = document.getElementById('copyAllBtn');
+        
+        copyToClipboard(originalAccountData, () => {
+            btn.innerHTML = '<span>✅</span> Скопировано!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = '<span>📋</span> Скопировать всё';
+                btn.classList.remove('copied');
+            }, 2000);
+            
+            // Триггерим попап отзыва
+            triggerReviewPopup();
+        });
+    }
+
+    function copyToClipboard(text, onSuccess) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+                fallbackCopy(text, onSuccess);
+            });
+        } else {
+            fallbackCopy(text, onSuccess);
+        }
+    }
+
+    function fallbackCopy(text, onSuccess) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        try {
+            document.execCommand('copy');
+            onSuccess();
+        } catch (e) {
+            console.error('Copy failed', e);
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Закрытие попапа по клику на оверлей
+    document.getElementById('reviewOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeReviewPopup();
+        }
+    });
+
+    // Закрытие по Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const reviewOverlay = document.getElementById('reviewOverlay');
+            if (reviewOverlay.classList.contains('show')) {
+                closeReviewPopup();
+            }
+        }
+    });
+
+    window.onload = async function() {
+        const main = document.getElementById('mainContainer');
+        const instruction = document.getElementById('instruction');
+        if (main) main.classList.add('active');
+        if (instruction) instruction.classList.add('active');
+
+        const disclaimerOverlay = document.getElementById('disclaimerOverlay');
+        if (disclaimerOverlay) disclaimerOverlay.classList.add('hidden');
+
+        const token = getToken();
+        try {
+            const checkResp = await fetch('/api/link/' + token);
+            const checkData = await checkResp.json();
+
+            if (checkData.status === 'used') {
+                const waitForCsrf = () => {
+                    return new Promise((resolve) => {
+                        if (csrfReady) {
+                            resolve();
+                        } else {
+                            const interval = setInterval(() => {
+                                if (csrfReady) {
+                                    clearInterval(interval);
+                                    resolve();
+                                }
+                            }, 100);
+                            setTimeout(() => {
+                                clearInterval(interval);
+                                resolve();
+                            }, 3000);
+                        }
+                    });
+                };
+                
+                await waitForCsrf();
+                
+                const response = await fetch('/get-account', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ token: token }),
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.status === 'ok' && data.account) {
+                    document.getElementById('getBtn').style.display = 'none';
+                    displayAccount(data.account);
+                    document.getElementById('result').classList.add('show');
+                }
+            }
+        } catch (e) {}
+    };
+</script>
+</body>
+</html>

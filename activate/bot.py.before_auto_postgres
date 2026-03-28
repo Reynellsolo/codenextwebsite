@@ -1,0 +1,594 @@
+import os
+from pathlib import Path
+
+# ================== AUTO LOAD CONFIG FROM FILE ==================
+def load_env_file(path: str):
+    p = Path(path)
+    if not p.exists():
+        return
+    for line in p.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        k = k.strip()
+        v = v.strip().strip('"').strip("'")
+        os.environ.setdefault(k, v)
+
+ENV_PATH = os.environ.get("BOT_ENV_PATH", "/opt/activate/bot.env")
+load_env_file(ENV_PATH)
+
+import re
+import secrets
+from typing import List, Tuple, Optional
+
+import aiosqlite
+from aiogram import Bot, Dispatcher, executor, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
+
+
+# ================== CONFIG ==================
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "").strip()
+ADMIN_ID = int(os.environ.get("ADMIN_ID", "0"))
+DB_PATH = os.environ.get("DB_PATH", "/opt/activate/site.db")
+PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", "https://codenext.ru")
+
+PAGE_SIZE = 50
+MAX_ATTEMPTS = 3
+
+if not BOT_TOKEN or ADMIN_ID == 0:
+    raise RuntimeError(f"Config missing. Fill {ENV_PATH} with BOT_TOKEN and ADMIN_ID")
+
+
+# ================== PRODUCTS ==================
+PRODUCTS = {
+    "plus_1m": "ChatGPT Plus · 1 месяц",
+    "go_12m": "ChatGPT GO · 12 месяцев",
+    "plus_12m": "ChatGPT Plus · 12 месяцев",
+}
+PRODUCT_KEYS = list(PRODUCTS.keys())
+
+
+# ================== HELPERS: DB ==================
+async def table_columns(db: aiosqlite.Connection, table: str) -> set:
+    cur = await db.execute(f"PRAGMA table_info({table});")
+    rows = await cur.fetchall()
+    return {r[1] for r in rows}
+
+
+async def db_init_safety():
+    create_sql = """
+    CREATE TABLE IF NOT EXISTS promo_codes (
+      code TEXT PRIMARY KEY,
+      product TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'free'
+    );
+
+    CREATE TABLE IF NOT EXISTS activation_links (
+      token TEXT PRIMARY KEY,
+      product TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active',
+      attempts INTEGER NOT NULL DEFAULT 0,
+      cdk_code TEXT,
+      last_error TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    """
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.executescript(create_sql)
+        await db.commit()
+
+
+def only_admin(message_or_call: types.base.TelegramObject) -> bool:
+    uid = None
+    if isinstance(message_or_call, types.Message):
+        uid = message_or_call.from_user.id
+    elif isinstance(message_or_call, types.CallbackQuery):
+        uid = message_or_call.from_user.id
+    return uid == ADMIN_ID
+
+
+def parse_token(text: str) -> str:
+    t = (text or "").strip()
+    m = re.search(r"/l/([A-Za-z0-9_\-]+)", t)
+    if m:
+        return m.group(1)
+    return t
+
+
+async def create_links(product: str, count: int) -> List[str]:
+    links = []
+    async with aiosqlite.connect(DB_PATH) as db:
+        for _ in range(count):
+            token = secrets.token_urlsafe(16)
+            await db.execute(
+                "INSERT INTO activation_links(token, product, status, attempts) VALUES(?, ?, 'active', 0)",
+                (token, product),
+            )
+            links.append(f"{PUBLIC_BASE_URL}/l/{token}")
+        await db.commit()
+    return links
+
+
+async def promo_insert_codes(product: str, codes: List[str]) -> Tuple[int, int]:
+    inserted = 0
+    skipped = 0
+    async with aiosqlite.connect(DB_PATH) as db:
+        cols = await table_columns(db, "promo_codes")
+        if "status" in cols:
+            sql = "INSERT OR IGNORE INTO promo_codes(code, product, status) VALUES(?, ?, 'free')"
+            params_len = 2
+        else:
+            sql = "INSERT OR IGNORE INTO promo_codes(code, product) VALUES(?, ?)"
+            params_len = 2
+
+        for c in codes:
+            c = c.strip()
+            if not c:
+                continue
+            try:
+                if params_len == 2:
+                    cur = await db.execute(sql, (c, product))
+                else:
+                    cur = await db.execute(sql, (c, product))
+                if cur.rowcount == 1:
+                    inserted += 1
+                else:
+                    skipped += 1
+            except Exception:
+                skipped += 1
+
+        await db.commit()
+    return inserted, skipped
+
+
+async def promo_count_free(product: str) -> int:
+    async with aiosqlite.connect(DB_PATH) as db:
+        cols = await table_columns(db, "promo_codes")
+        if "status" in cols:
+            cur = await db.execute(
+                "SELECT COUNT(*) FROM promo_codes WHERE product=? AND status='free'",
+                (product,),
+            )
+        else:
+            cur = await db.execute(
+                "SELECT COUNT(*) FROM promo_codes WHERE product=?",
+                (product,),
+            )
+        (n,) = await cur.fetchone()
+        return int(n)
+
+
+async def promo_list_free(product: str, offset: int, limit: int) -> Tuple[int, List[str]]:
+    async with aiosqlite.connect(DB_PATH) as db:
+        cols = await table_columns(db, "promo_codes")
+        if "status" in cols:
+            cur_total = await db.execute(
+                "SELECT COUNT(*) FROM promo_codes WHERE product=? AND status='free'",
+                (product,),
+            )
+            (total,) = await cur_total.fetchone()
+
+            cur = await db.execute(
+                "SELECT code FROM promo_codes WHERE product=? AND status='free' ORDER BY rowid LIMIT ? OFFSET ?",
+                (product, limit, offset),
+            )
+        else:
+            cur_total = await db.execute(
+                "SELECT COUNT(*) FROM promo_codes WHERE product=?",
+                (product,),
+            )
+            (total,) = await cur_total.fetchone()
+
+            cur = await db.execute(
+                "SELECT code FROM promo_codes WHERE product=? ORDER BY rowid LIMIT ? OFFSET ?",
+                (product, limit, offset),
+            )
+
+        rows = await cur.fetchall()
+        codes = [r[0] for r in rows]
+        return int(total), codes
+
+
+async def link_info(token: str) -> Optional[dict]:
+    async with aiosqlite.connect(DB_PATH) as db:
+        cols = await table_columns(db, "activation_links")
+        base_cols = ["token", "product", "status"]
+        extra = []
+        for c in ["attempts", "cdk_code", "last_error", "created_at"]:
+            if c in cols:
+                extra.append(c)
+        sel = base_cols + extra
+        cur = await db.execute(
+            f"SELECT {', '.join(sel)} FROM activation_links WHERE token=?",
+            (token,),
+        )
+        row = await cur.fetchone()
+        if not row:
+            return None
+        data = dict(zip(sel, row))
+        return data
+
+# === ПОИСК ЗАКАЗА ===
+async def find_order(order_id: str) -> Optional[dict]:
+    async with aiosqlite.connect(DB_PATH) as db:
+        try:
+            cur = await db.execute(
+                "SELECT order_id, product, status, paid_at, activation_token FROM orders WHERE order_id=?",
+                (order_id,)
+            )
+            row = await cur.fetchone()
+            if not row: return None
+            return {
+                "order_id": row[0],
+                "product": row[1],
+                "status": row[2],
+                "paid_at": row[3],
+                "token": row[4]
+            }
+        except Exception:
+            return None
+# ====================
+
+# ================== UI: keyboards ==================
+def main_kb() -> types.ReplyKeyboardMarkup:
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    kb.row("➕ Создать ссылки", "📥 Загрузить лицензии")
+    kb.row("📦 Остатки по тарифам", "📋 Лицензии по тарифу")
+    kb.row("🔍 Проверить ссылку", "🔎 Найти заказ")
+    return kb
+
+def cancel_kb() -> types.ReplyKeyboardMarkup:
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    kb.add("↩️ Отмена")
+    return kb
+
+def tariffs_inline(prefix: str) -> types.InlineKeyboardMarkup:
+    kb = types.InlineKeyboardMarkup()
+    kb.add(types.InlineKeyboardButton(PRODUCTS["plus_1m"], callback_data=f"{prefix}:plus_1m"))
+    kb.add(types.InlineKeyboardButton(PRODUCTS["go_12m"], callback_data=f"{prefix}:go_12m"))
+    kb.add(types.InlineKeyboardButton(PRODUCTS["plus_12m"], callback_data=f"{prefix}:plus_12m"))
+    kb.add(types.InlineKeyboardButton("↩️ В меню", callback_data="menu"))
+    return kb
+
+
+def keys_pager_kb(product: str, offset: int, total: int) -> types.InlineKeyboardMarkup:
+    kb = types.InlineKeyboardMarkup(row_width=2)
+    prev_off = max(0, offset - PAGE_SIZE)
+    next_off = offset + PAGE_SIZE
+
+    buttons = []
+    if offset > 0:
+        buttons.append(types.InlineKeyboardButton("⬅️ Назад", callback_data=f"keys:{product}:{prev_off}"))
+    if next_off < total:
+        buttons.append(types.InlineKeyboardButton("➡️ Вперёд", callback_data=f"keys:{product}:{next_off}"))
+
+    if buttons:
+        kb.row(*buttons)
+
+    kb.add(types.InlineKeyboardButton("🔁 Выбрать другой тариф", callback_data="keys_choose"))
+    kb.add(types.InlineKeyboardButton("↩️ В меню", callback_data="menu"))
+    return kb
+
+
+# ================== FSM ==================
+class CreateLinks(StatesGroup):
+    choosing_tariff = State()
+    waiting_count = State()
+
+
+class UploadCDK(StatesGroup):
+    choosing_tariff = State()
+    waiting_codes = State()
+
+
+class CheckLink(StatesGroup):
+    waiting_token = State()
+
+class FindOrder(StatesGroup):
+    waiting_id = State()
+
+class KeysView(StatesGroup):
+    choosing_tariff = State()
+
+
+# ================== BOT ==================
+bot = Bot(token=BOT_TOKEN, parse_mode=types.ParseMode.HTML)
+dp = Dispatcher(bot, storage=MemoryStorage())
+
+
+@dp.message_handler(commands=["start"])
+async def cmd_start(message: types.Message):
+    if not only_admin(message):
+        return await message.answer("Нет доступа.")
+    await db_init_safety()
+    await message.answer("Админ-панель готова ✅", reply_markup=main_kb())
+
+# -------- CANCEL HANDLER (GLOBAL) --------
+@dp.message_handler(lambda m: m.text == "↩️ Отмена", state="*")
+async def cancel_action(message: types.Message, state: FSMContext):
+    await state.finish()
+    await message.answer("Действие отменено.", reply_markup=main_kb())
+
+# -------- MENU BUTTONS --------
+@dp.message_handler(lambda m: only_admin(m) and m.text == "➕ Создать ссылки")
+async def menu_create_links(message: types.Message):
+    await CreateLinks.choosing_tariff.set()
+    await message.answer("Выбери тариф:", reply_markup=cancel_kb()) # + Cancel KB
+    await message.answer("Тарифы:", reply_markup=tariffs_inline("mklinks"))
+
+
+@dp.message_handler(lambda m: only_admin(m) and m.text == "📥 Загрузить лицензии")
+async def menu_upload_codes(message: types.Message):
+    await UploadCDK.choosing_tariff.set()
+    await message.answer("Выбери тариф для загрузки лицензий:", reply_markup=cancel_kb())
+    await message.answer("Тарифы:", reply_markup=tariffs_inline("upcdk"))
+
+
+@dp.message_handler(lambda m: only_admin(m) and m.text == "📦 Остатки по тарифам")
+async def menu_stock(message: types.Message):
+    lines = ["📦 <b>Остатки лицензий</b>:"]
+    for p in PRODUCT_KEYS:
+        n = await promo_count_free(p)
+        lines.append(f"\n• {PRODUCTS[p]} — <b>{n}</b>")
+    await message.answer("\n".join(lines), reply_markup=main_kb())
+
+
+@dp.message_handler(lambda m: only_admin(m) and m.text == "📋 Лицензии по тарифу")
+async def menu_keys(message: types.Message):
+    await KeysView.choosing_tariff.set()
+    await message.answer("Выбери тариф для просмотра лицензий:", reply_markup=cancel_kb())
+    await message.answer("Тарифы:", reply_markup=tariffs_inline("keyschoose"))
+
+
+@dp.message_handler(lambda m: only_admin(m) and m.text == "🔍 Проверить ссылку")
+async def menu_check_link(message: types.Message):
+    await CheckLink.waiting_token.set()
+    await message.answer("Отправь <b>токен</b> или <b>полную ссылку</b> /l/{token}:", reply_markup=cancel_kb())
+
+@dp.message_handler(lambda m: only_admin(m) and m.text == "🔎 Найти заказ")
+async def menu_find_order(message: types.Message):
+    await FindOrder.waiting_id.set()
+    await message.answer("Отправь <b>Order ID</b> заказа:", reply_markup=cancel_kb())
+
+
+# -------- HELPER: show keys page --------
+async def show_keys_page(message: types.Message, product: str, offset: int, edit: bool = True):
+    total, codes = await promo_list_free(product, offset=offset, limit=PAGE_SIZE)
+    start = offset + 1 if total > 0 else 0
+    end = min(offset + PAGE_SIZE, total)
+
+    header = (
+        f"📋 <b>Лицензии</b> · {PRODUCTS[product]}\n"
+        f"Показаны <b>{start}–{end}</b> из <b>{total}</b>\n\n"
+    )
+
+    if total == 0:
+        body = "Пусто (нет доступных лицензий)."
+    else:
+        body = "<code>" + "\n".join(codes) + "</code>"
+
+    text = header + body
+    kb = keys_pager_kb(product, offset, total)
+
+    if edit:
+        await message.edit_text(text, reply_markup=kb)
+    else:
+        await message.answer(text, reply_markup=kb)
+
+
+# -------- CALLBACKS: common --------
+@dp.callback_query_handler(lambda c: True, state="*")
+async def all_callbacks(call: types.CallbackQuery, state: FSMContext):
+    if not only_admin(call):
+        await call.answer("Нет доступа.", show_alert=True)
+        return
+
+    data = call.data or ""
+
+    if data == "menu":
+        await state.finish()
+        await call.message.edit_text("Главное меню ✅")
+        await call.message.answer("Выбери действие:", reply_markup=main_kb())
+        await call.answer()
+        return
+
+    if data.startswith("mklinks:"):
+        product = data.split(":", 1)[1]
+        if product not in PRODUCTS:
+            await call.answer("Неверный тариф", show_alert=True)
+            return
+        await state.update_data(product=product)
+        await CreateLinks.waiting_count.set()
+        await call.message.edit_text(f"Тариф: <b>{PRODUCTS[product]}</b>\n\nНапиши число ссылок (1..500):")
+        await call.answer()
+        return
+
+    if data.startswith("upcdk:"):
+        product = data.split(":", 1)[1]
+        if product not in PRODUCTS:
+            await call.answer("Неверный тариф", show_alert=True)
+            return
+        await state.update_data(product=product)
+        await UploadCDK.waiting_codes.set()
+        await call.message.edit_text(
+            f"Тариф: <b>{PRODUCTS[product]}</b>\n\n"
+            "Отправь лицензии <b>по одной в строке</b>.\n"
+            "Пример:\n"
+            "<code>LICENSE-1\nLICENSE-2\nLICENSE-3</code>"
+        )
+        await call.answer()
+        return
+
+    if data.startswith("keyschoose:"):
+        product = data.split(":", 1)[1]
+        if product not in PRODUCTS:
+            await call.answer("Неверный тариф", show_alert=True)
+            return
+        await show_keys_page(call.message, product=product, offset=0)
+        await call.answer()
+        return
+
+    if data == "keys_choose":
+        await call.message.edit_text("Выбери тариф для просмотра лицензий:")
+        await call.message.edit_reply_markup(reply_markup=tariffs_inline("keyschoose"))
+        await call.answer()
+        return
+
+    if data.startswith("keys:"):
+        _, product, off = data.split(":", 2)
+        if product not in PRODUCTS:
+            await call.answer("Неверный тариф", show_alert=True)
+            return
+        try:
+            offset = int(off)
+        except:
+            offset = 0
+        await show_keys_page(call.message, product=product, offset=offset, edit=True)
+        await call.answer()
+        return
+
+    await call.answer()
+
+
+# -------- FSM: CREATE LINKS --------
+@dp.message_handler(lambda m: only_admin(m), state=CreateLinks.waiting_count)
+async def create_links_count(message: types.Message, state: FSMContext):
+    t = (message.text or "").strip()
+    if not t.isdigit():
+        return await message.answer("Нужно число. Пример: 25")
+    count = int(t)
+    if count < 1 or count > 500:
+        return await message.answer("Диапазон 1..500. Напиши другое число.")
+
+    data = await state.get_data()
+    product = data.get("product")
+    if product not in PRODUCTS:
+        await state.finish()
+        return await message.answer("Ошибка состояния. /start", reply_markup=main_kb())
+
+    links = await create_links(product, count)
+
+    await message.answer(f"✅ Сгенерировано: <b>{count}</b>\nТариф: <b>{PRODUCTS[product]}</b>\n\nОтправляю ссылками пачками…")
+
+    chunk = []
+    for i, url in enumerate(links, 1):
+        chunk.append(url)
+        if i % 20 == 0:
+            await message.answer("\n".join(chunk))
+            chunk = []
+    if chunk:
+        await message.answer("\n".join(chunk))
+
+    await state.finish()
+    await message.answer("Готово ✅", reply_markup=main_kb())
+
+
+# -------- FSM: UPLOAD CDK --------
+@dp.message_handler(lambda m: only_admin(m), state=UploadCDK.waiting_codes)
+async def upload_codes(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    product = data.get("product")
+    if product not in PRODUCTS:
+        await state.finish()
+        return await message.answer("Ошибка состояния. /start", reply_markup=main_kb())
+
+    raw = message.text or ""
+    codes = [line.strip() for line in raw.splitlines() if line.strip()]
+    if not codes:
+        return await message.answer("Пусто. Отправь ключи по одному в строке.")
+
+    ins, skip = await promo_insert_codes(product, codes)
+    left = await promo_count_free(product)
+
+    await message.answer(
+        f"✅ Загружено в {PRODUCTS[product]}:\n"
+        f"• добавлено: <b>{ins}</b>\n"
+        f"• пропущено (дубли/ошибка): <b>{skip}</b>\n"
+        f"• остаток free: <b>{left}</b>",
+        reply_markup=main_kb()
+    )
+    await state.finish()
+
+
+# -------- FSM: CHECK LINK --------
+@dp.message_handler(lambda m: only_admin(m), state=CheckLink.waiting_token)
+async def check_link(message: types.Message, state: FSMContext):
+    token = parse_token(message.text)
+    if not token or len(token) < 6:
+        return await message.answer("Пришли токен или ссылку вида .../l/{token}")
+
+    info = await link_info(token)
+    if not info:
+        await state.finish()
+        return await message.answer("❌ Не найдено.", reply_markup=main_kb())
+
+    product = info.get("product", "?")
+    status = info.get("status", "?")
+    attempts = info.get("attempts", 0)
+    cdk = info.get("cdk_code") or "—"
+    last_error = info.get("last_error") or "—"
+    created_at = info.get("created_at") or "—"
+
+    status_text = {
+        "active": "⏳ Ожидает",
+        "used": "✅ Оформлена",
+        "blocked": "🚫 Заблокирована",
+    }.get(status, status)
+
+    text = (
+        f"🔍 <b>Проверка ссылки</b>\n\n"
+        f"Token: <code>{token}</code>\n"
+        f"Тариф: <b>{PRODUCTS.get(product, product)}</b>\n"
+        f"Статус: <b>{status_text}</b>\n"
+        f"Попытки: <b>{attempts}</b> / <b>{MAX_ATTEMPTS}</b>\n"
+        f"CDK: <code>{cdk}</code>\n"
+        f"Ошибка: <code>{last_error}</code>\n"
+        f"Создано: <code>{created_at}</code>\n"
+    )
+
+    await state.finish()
+    await message.answer(text, reply_markup=main_kb())
+
+# -------- FSM: FIND ORDER --------
+@dp.message_handler(lambda m: only_admin(m), state=FindOrder.waiting_id)
+async def find_order_handler(message: types.Message, state: FSMContext):
+    oid = message.text.strip()
+    order = await find_order(oid)
+    if not order:
+        await state.finish()
+        return await message.answer("❌ Заказ не найден.", reply_markup=main_kb())
+
+    token = order.get("token")
+    link = f"{PUBLIC_BASE_URL}/l/{token}" if token else "—"
+    status = order.get("status")
+    
+    text = (
+        f"📦 <b>Заказ</b>\n"
+        f"ID: <code>{oid}</code>\n"
+        f"Товар: <b>{PRODUCTS.get(order['product'], order['product'])}</b>\n"
+        f"Статус: <b>{status}</b>\n"
+        f"Оплачен: {order.get('paid_at') or '—'}\n"
+        f"Ссылка: <code>{link}</code>"
+    )
+    
+    await state.finish()
+    await message.answer(text, reply_markup=main_kb())
+
+
+# -------- fallback --------
+@dp.message_handler(lambda m: only_admin(m))
+async def fallback(message: types.Message):
+    await message.answer("Выбери действие кнопками ниже 👇", reply_markup=main_kb())
+
+
+def main():
+    executor.start_polling(dp, skip_updates=True)
+
+
+if __name__ == "__main__":
+    main()

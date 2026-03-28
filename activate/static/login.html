@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Вход — CodeNext</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#818cf8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-secondary: #0a0a0f;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.1);
+      --card-border-hover: rgba(255,255,255,0.2);
+      --text: #fff;
+      --text-secondary: #e4e4e7;
+      --muted: rgba(255,255,255,0.6);
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --accent-rgb: 129,140,248;
+      --accent-light: rgba(129,140,248,0.15);
+      --accent-glow: rgba(129,140,248,0.5);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --green-light: rgba(52,211,153,0.15);
+      --red: #ef4444;
+      --red-light: rgba(239,68,68,0.15);
+    }
+    
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-secondary: #fff;
+      --card: rgba(255,255,255,0.9);
+      --card-hover: #fff;
+      --card-border: rgba(0,0,0,0.1);
+      --card-border-hover: rgba(0,0,0,0.15);
+      --text: #1a1a1a;
+      --text-secondary: #2d2d2d;
+      --muted: #555;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-rgb: 99,102,241;
+      --accent-light: rgba(99,102,241,0.12);
+      --accent-glow: rgba(99,102,241,0.4);
+      --green: #059669;
+      --green-rgb: 5,150,105;
+      --green-light: rgba(5,150,105,0.12);
+      --red: #dc2626;
+      --red-light: rgba(220,38,38,0.12);
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+      transition: background .5s ease, color .3s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: 
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--accent-rgb), .25), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 90% 50%, rgba(167,139,250,.12), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 10% 80%, rgba(var(--green-rgb),.08), transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    
+    [data-theme="light"] body::before { opacity: .5; }
+    
+    @keyframes bgPulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: .8; transform: scale(1.05); }
+    }
+    
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: rgba(var(--accent-rgb), .12);
+      top: -200px;
+      left: -200px;
+    }
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: rgba(167,139,250,.08);
+      bottom: -150px;
+      right: -150px;
+      animation-delay: -5s;
+    }
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: rgba(var(--green-rgb),.06);
+      top: 50%;
+      right: -100px;
+      animation-delay: -10s;
+    }
+    
+    [data-theme="light"] .orb { opacity: .3; }
+    
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, 30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(.95); }
+      75% { transform: translate(40px, -20px) scale(1.02); }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .orb { display: none; }
+    }
+    
+    /* === CARD === */
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 40px 36px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 40px rgba(var(--accent-rgb), .08),
+        0 20px 40px rgba(0,0,0,.15);
+      animation: cardAppear .6s cubic-bezier(.4,0,.2,1);
+      transition: border-color .3s ease, box-shadow .3s ease;
+    }
+    
+    [data-theme="light"] .card {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 
+        0 0 30px rgba(var(--accent-rgb), .06),
+        0 20px 40px rgba(0,0,0,.08);
+    }
+    
+    .card:hover {
+      border-color: var(--card-border-hover);
+    }
+    
+    @keyframes cardAppear {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(.96); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+    
+    /* === HEADER === */
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      font-family: monospace;
+      box-shadow: 0 0 30px var(--accent-glow);
+      position: relative;
+      transition: transform .3s ease;
+    }
+    
+    .logo:hover { transform: scale(1.1) rotate(-5deg); }
+    
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,.3), transparent 60%);
+    }
+    
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.5px;
+    }
+    
+    .theme-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--card-hover);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+    }
+    
+    [data-theme="light"] .theme-btn {
+      background: rgba(255,255,255,0.8);
+    }
+    
+    .theme-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: scale(1.1) rotate(180deg);
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+    
+    /* === TITLE === */
+    .title {
+      font-size: 32px;
+      font-weight: 900;
+      margin: 0 0 8px;
+      letter-spacing: -.5px;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    
+    .title .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin: 0 0 28px;
+      line-height: 1.5;
+    }
+    
+    /* === TABS === */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 28px;
+      background: var(--card-hover);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+    }
+    
+    [data-theme="light"] .tabs { background: #f8f9fc; }
+    
+    .tab {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all .3s ease;
+    }
+    
+    .tab:hover:not(.active) {
+      color: var(--text);
+      background: var(--accent-light);
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    
+    /* === FORM === */
+    .field {
+      margin-bottom: 20px;
+    }
+    
+    .field-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    .field-wrapper {
+      position: relative;
+    }
+    
+    .field-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      opacity: 0.5;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    
+    .field-input {
+      width: 100%;
+      padding: 16px 18px 16px 48px;
+      border-radius: 14px;
+      border: 2px solid var(--card-border);
+      background: var(--card-hover);
+      color: var(--text);
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 500;
+      outline: none;
+      transition: all .3s ease;
+    }
+    
+    [data-theme="light"] .field-input {
+      background: #fff;
+      border-color: #e2e8f0;
+    }
+    
+    .field-input::placeholder {
+      color: var(--muted);
+    }
+    
+    .field-input:hover {
+      border-color: var(--card-border-hover);
+    }
+    
+    .field-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    
+    .field-input:focus + .field-icon {
+      opacity: 1;
+    }
+    
+    .field-input.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-light);
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0.5;
+      padding: 4px;
+      transition: opacity .3s ease;
+    }
+    
+    .password-toggle:hover {
+      opacity: 1;
+    }
+    
+    /* === BUTTON === */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 8px 25px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+    
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transition: left .6s ease;
+    }
+    
+    .btn:hover::before { left: 100%; }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px var(--accent-glow);
+    }
+    
+    .btn:active { transform: translateY(0); }
+    
+    .btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .btn-text {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      display: none;
+    }
+    
+    .btn.loading .btn-spinner { display: block; }
+    .btn.loading .btn-text { display: none; }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* === LINKS === */
+    .links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    
+    .link {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all .3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    
+    .link:hover {
+      color: var(--accent2);
+      background: var(--accent-light);
+    }
+    
+    /* === SECURITY BADGE === */
+    .security-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: var(--green-light);
+      border: 1px solid rgba(var(--green-rgb), .2);
+      border-radius: 16px;
+      font-size: 14px;
+      color: var(--green);
+      font-weight: 600;
+    }
+    
+    [data-theme="light"] .security-badge { color: #047857; }
+    
+    /* === TOAST === */
+    #toast {
+      display: none;
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      padding: 18px 24px;
+      background: var(--bg-secondary);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      max-width: 400px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    
+    [data-theme="light"] #toast {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+    
+    #toast.error { border-color: var(--red); }
+    #toast.success { border-color: var(--green); }
+    
+    #toast.show { 
+      display: block; 
+      animation: slideIn .4s cubic-bezier(.68,-.55,.265,1.55); 
+    }
+    #toast.hide { 
+      animation: slideOut .4s ease forwards; 
+    }
+    
+    @keyframes slideIn { 
+      from { transform: translateX(120%); opacity: 0; } 
+      to { transform: translateX(0); opacity: 1; } 
+    }
+    @keyframes slideOut { 
+      from { transform: translateX(0); opacity: 1; } 
+      to { transform: translateX(120%); opacity: 0; } 
+    }
+    
+    .toast-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .toast-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    
+    #toastMsg {
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    
+    /* === MOBILE === */
+    @media (max-width: 520px) {
+      body { padding: 16px; }
+      
+      .card {
+        padding: 28px 24px;
+        border-radius: 24px;
+      }
+      
+      .title { font-size: 26px; }
+      .subtitle { font-size: 14px; margin-bottom: 24px; }
+      .top { margin-bottom: 28px; }
+      .logo { width: 44px; height: 44px; font-size: 16px; }
+      .brand-name { font-size: 18px; }
+      .theme-btn { width: 44px; height: 44px; }
+      .tabs { padding: 5px; }
+      .tab { padding: 12px 14px; font-size: 13px; }
+      .field-input { padding: 14px 16px 14px 44px; }
+      .field-icon { left: 14px; }
+      .btn { padding: 16px; }
+      .security-badge { padding: 14px 16px; font-size: 13px; }
+      
+      #toast {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        max-width: none;
+      }
+      
+      .orb { display: none; }
+      
+      body::before {
+        animation: none;
+        background: radial-gradient(ellipse at 50% 0%, rgba(var(--accent-rgb), .2), transparent 60%);
+      }
+    }
+    
+    @supports (-webkit-touch-callout: none) {
+      .field-input { font-size: 16px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <main class="card">
+    <div class="top">
+      <a class="brand" href="/">
+        <div class="logo">&lt;/&gt;</div>
+        <span class="brand-name">CodeNext</span>
+      </a>
+      <button id="themeBtn" class="theme-btn" type="button" aria-label="Переключить тему">🌙</button>
+    </div>
+    
+    <h1 id="formTitle" class="title"><span class="gradient">Вход</span> в аккаунт</h1>
+    <p class="subtitle">Управляйте заказами, балансом и реферальной программой</p>
+
+    <div class="tabs">
+      <button id="loginTab" class="tab active" type="button">Вход</button>
+      <button id="registerTab" class="tab" type="button">Регистрация</button>
+    </div>
+
+    <form id="authForm" autocomplete="on">
+      <div class="field">
+        <label class="field-label" for="email">Email</label>
+        <div class="field-wrapper">
+          <input id="email" class="field-input" type="email" placeholder="your@email.com" required autocomplete="email" inputmode="email"/>
+          <span class="field-icon">✉️</span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="password">Пароль</label>
+        <div class="field-wrapper">
+          <input id="password" class="field-input" type="password" placeholder="Минимум 8 символов" required minlength="8" autocomplete="current-password"/>
+          <span class="field-icon">🔒</span>
+          <button type="button" id="togglePassword" class="password-toggle">👁️</button>
+        </div>
+      </div>
+      <input id="referralCode" type="hidden" />
+      <button id="submitBtn" class="btn" type="submit">
+        <span class="btn-text">Войти</span>
+        <span class="btn-spinner"></span>
+      </button>
+    </form>
+    
+    <div class="links">
+      <a href="https://t.me/CodeNext_support" target="_blank" rel="noopener" class="link">🔑 Забыли пароль?</a>
+     </div>
+    
+    <div class="security-badge">
+      <span>🔒</span>
+      <span>Ваши данные надёжно защищены</span>
+    </div>
+  </main>
+
+  <div id="toast">
+    <div class="toast-content">
+      <span class="toast-icon" id="toastIcon">⚠️</span>
+      <div id="toastMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const s = localStorage.getItem('theme');
+      if (s === 'light' || (!s && !matchMedia('(prefers-color-scheme:dark)').matches)) {
+        document.documentElement.setAttribute('data-theme','light');
+      }
+    })();
+
+    let csrf = '';
+    (async function(){
+      try {
+        const r = await fetch('/cabinet/csrf-token',{credentials:'include'});
+        const d = await r.json().catch(()=>({}));
+        if(d.csrf_token) csrf = d.csrf_token;
+      } catch(e){}
+    })();
+
+    (function(){
+      try {
+        const p = new URLSearchParams(location.search);
+        const ref = (p.get('ref')||'').trim().toUpperCase();
+        if(!ref || !/^[A-Z0-9_-]{4,40}$/.test(ref)) return;
+        if(document.cookie.includes('referral_code=')) return;
+        document.cookie = 'referral_code='+encodeURIComponent(ref)+'; Max-Age=2592000; Path=/; SameSite=Lax';
+      } catch(e){}
+    })();
+
+    const $ = id => document.getElementById(id);
+    const themeBtn = $('themeBtn'), loginTab = $('loginTab'), registerTab = $('registerTab');
+    const formTitle = $('formTitle'), submitBtn = $('submitBtn'), authForm = $('authForm');
+    const toast = $('toast'), toastMsg = $('toastMsg'), toastIcon = $('toastIcon');
+    const emailInput = $('email'), passwordInput = $('password'), referralCodeEl = $('referralCode');
+    const togglePassword = $('togglePassword');
+
+    let mode = 'login';
+
+    function tr(m) {
+      if (!m) return 'Неизвестная ошибка';
+      const t = {
+        'invalid credentials': 'Неверный email или пароль',
+        'invalid email or password': 'Неверный email или пароль',
+        'user not found': 'Пользователь не найден',
+        'email already registered': 'Email уже зарегистрирован',
+        'email already exists': 'Email уже зарегистрирован',
+        'invalid email': 'Неверный формат email',
+        'password too short': 'Пароль минимум 8 символов',
+        'token expired': 'Сессия истекла',
+        'invalid token': 'Войдите снова',
+        'failed to fetch': 'Нет интернета',
+        'network error': 'Ошибка сети',
+        'server error': 'Ошибка сервера',
+        'too many requests': 'Слишком много попыток'
+      };
+      const l = m.toLowerCase();
+      for (const [k, v] of Object.entries(t)) if (l.includes(k)) return v;
+      return m;
+    }
+
+    function updTh() {
+      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updTh();
+
+    themeBtn.onclick = () => {
+      const l = document.documentElement.getAttribute('data-theme') === 'light';
+      if (l) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', l ? 'dark' : 'light');
+      updTh();
+    };
+
+    togglePassword.onclick = () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePassword.textContent = isPassword ? '🙈' : '👁️';
+    };
+
+    function showToast(text, type = 'error') {
+      toastMsg.textContent = text;
+      toastIcon.textContent = type === 'success' ? '✅' : '⚠️';
+      toast.className = type + ' show';
+      clearTimeout(showToast.t);
+      showToast.t = setTimeout(() => {
+        toast.className = type + ' hide';
+        setTimeout(() => { toast.className = ''; }, 400);
+      }, 4000);
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.split('; ').find(x => x.startsWith(name + '='));
+      return match ? decodeURIComponent(match.split('=')[1]) : '';
+    }
+
+    function syncMode() {
+      const isLogin = mode === 'login';
+      loginTab.classList.toggle('active', isLogin);
+      registerTab.classList.toggle('active', !isLogin);
+      formTitle.innerHTML = isLogin 
+        ? '<span class="gradient">Вход</span> в аккаунт'
+        : '<span class="gradient">Регистрация</span>';
+      submitBtn.querySelector('.btn-text').textContent = isLogin ? 'Войти' : 'Создать аккаунт';
+      passwordInput.autocomplete = isLogin ? 'current-password' : 'new-password';
+      passwordInput.placeholder = isLogin ? 'Введите пароль' : 'Минимум 8 символов';
+      referralCodeEl.value = getCookie('referral_code').toUpperCase();
+    }
+
+    loginTab.onclick = () => { mode = 'login'; syncMode(); };
+    registerTab.onclick = () => { mode = 'register'; syncMode(); };
+
+    authForm.onsubmit = async (e) => {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value;
+      
+      if (!email || !password) {
+        showToast('Заполните все поля');
+        return;
+      }
+      
+      if (password.length < 8) {
+        showToast('Пароль минимум 8 символов');
+        return;
+      }
+      
+      const endpoint = mode === 'login' ? '/cabinet/auth/login' : '/cabinet/auth/register';
+      const payload = { email, password };
+      
+      if (mode === 'register' && referralCodeEl.value) {
+        payload.referral_code = referralCodeEl.value;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+      
+      try {
+        const r = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf },
+          body: JSON.stringify(payload),
+          credentials: 'include'
+        });
+        
+        const data = await r.json().catch(() => ({}));
+        
+        if (!r.ok || !data.token) {
+          throw new Error(tr(data.detail || data.error || 'Ошибка авторизации'));
+        }
+
+        localStorage.setItem('cabinet_token', data.token);
+        showToast('✓ Успешно! Переходим...', 'success');
+        
+        setTimeout(() => { location.href = '/cabinet'; }, 600);
+        
+      } catch (err) {
+        showToast(err.message);
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+    };
+
+    syncMode();
+  </script>
+</body>
+</html>

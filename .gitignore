@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Env / secrets
+.env
+.env.*
+*.env
+bot.env
+
+# Virtual env
+venv/
+.venv/
+
+# Logs
+*.log
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups and old files
+*.bak
+*.old
+*.backup
+*.backup_*
+*.old_*
+*.tar
+*.tar.gz
+*.tgz
+
+# IDE
+.vscode/
+.idea/
+
+# System
+.DS_Store

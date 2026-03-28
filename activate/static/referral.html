@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Партнёрская программа — CodeNext</title>
+  <meta name="description" content="Зарабатывайте 10% с каждой покупки привлечённых клиентов. Пожизненные выплаты, быстрый вывод от 500₽." />
+  <meta name="theme-color" content="#818cf8" />
+  
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-secondary: #0a0a0f;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.1);
+      --card-border-hover: rgba(255,255,255,0.2);
+      --text: #fff;
+      --text-secondary: #e4e4e7;
+      --muted: rgba(255,255,255,0.6);
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --accent-rgb: 129,140,248;
+      --accent-light: rgba(129,140,248,0.15);
+      --accent-glow: rgba(129,140,248,0.5);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --green-light: rgba(52,211,153,0.15);
+      --green-glow: rgba(52,211,153,0.5);
+      --yellow: #fbbf24;
+      --yellow-light: rgba(251,191,36,0.15);
+    }
+    
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-secondary: #fff;
+      --card: rgba(255,255,255,0.9);
+      --card-hover: #fff;
+      --card-border: rgba(0,0,0,0.1);
+      --card-border-hover: rgba(0,0,0,0.15);
+      --text: #1a1a1a;
+      --text-secondary: #2d2d2d;
+      --muted: #555;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-rgb: 99,102,241;
+      --accent-light: rgba(99,102,241,0.12);
+      --accent-glow: rgba(99,102,241,0.4);
+      --green: #059669;
+      --green-rgb: 5,150,105;
+      --green-light: rgba(5,150,105,0.12);
+      --green-glow: rgba(5,150,105,0.4);
+      --yellow: #d97706;
+      --yellow-light: rgba(217,119,6,0.12);
+    }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background .5s ease, color .3s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: 
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--accent-rgb), .25), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 90% 50%, rgba(167,139,250,.12), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 10% 80%, rgba(var(--green-rgb),.08), transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    
+    [data-theme="light"] body::before { opacity: .5; }
+    
+    @keyframes bgPulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: .8; transform: scale(1.05); }
+    }
+    
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: rgba(var(--accent-rgb), .12);
+      top: -200px;
+      left: -200px;
+    }
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: rgba(167,139,250,.08);
+      bottom: -150px;
+      right: -150px;
+      animation-delay: -5s;
+    }
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: rgba(var(--green-rgb),.06);
+      top: 50%;
+      right: -100px;
+      animation-delay: -10s;
+    }
+    
+    [data-theme="light"] .orb { opacity: .3; }
+    
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, 30px) scale(1.05); }
+      50% { transform: translate(-20px, 50px) scale(.95); }
+      75% { transform: translate(40px, -20px) scale(1.02); }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .orb { display: none; }
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-bottom: 60px;
+    }
+    
+    /* === HEADER === */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      margin-bottom: 40px;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      font-family: monospace;
+      box-shadow: 0 0 30px var(--accent-glow);
+      position: relative;
+      transition: transform .3s ease;
+    }
+    
+    .logo:hover { transform: scale(1.1) rotate(-5deg); }
+    
+    .logo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,.3), transparent 60%);
+    }
+    
+    .brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -.5px;
+    }
+    
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .pill {
+      padding: 12px 20px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+      transition: all .3s ease;
+    }
+    
+    .pill:hover {
+      background: var(--card-hover);
+      border-color: var(--card-border-hover);
+      transform: translateY(-2px);
+    }
+    
+    .pill.accent {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+    
+    .theme-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+    }
+    
+    .theme-btn:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      transform: scale(1.1) rotate(180deg);
+      box-shadow: 0 0 25px var(--accent-glow);
+    }
+    
+    /* === HERO === */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 80px;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--accent-light);
+      border: 1px solid rgba(var(--accent-rgb), .3);
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 24px;
+      animation: fadeUp .6s ease;
+    }
+    
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .hero h1 {
+      font-size: clamp(36px, 7vw, 64px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      animation: fadeUp .6s ease .1s backwards;
+    }
+    
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--green));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(18px, 3vw, 24px);
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      animation: fadeUp .6s ease .2s backwards;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp .6s ease .3s backwards;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 32px;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s ease;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+    
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transition: left .6s ease;
+    }
+    
+    .btn-primary:hover::before { left: 100%; }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px var(--accent-glow);
+    }
+    
+    .btn-secondary {
+      background: var(--card);
+      border: 2px solid var(--card-border);
+      color: var(--text);
+      backdrop-filter: blur(10px);
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+    
+    /* === STATS === */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 60px;
+    }
+    
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      transition: all .3s ease;
+      animation: cardAppear .6s cubic-bezier(.4,0,.2,1) backwards;
+    }
+    
+    .stat-card:nth-child(1) { animation-delay: .1s; }
+    .stat-card:nth-child(2) { animation-delay: .15s; }
+    .stat-card:nth-child(3) { animation-delay: .2s; }
+    .stat-card:nth-child(4) { animation-delay: .25s; }
+    
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(var(--accent-rgb), .15);
+    }
+    
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(30px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 16px;
+      border-radius: 16px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    
+    .stat-card:nth-child(2) .stat-icon { background: var(--green-light); }
+    .stat-card:nth-child(3) .stat-icon { background: var(--yellow-light); }
+    .stat-card:nth-child(4) .stat-icon { background: var(--accent-light); }
+    
+    .stat-value {
+      font-size: 42px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+    
+    .stat-card:nth-child(2) .stat-value {
+      background: linear-gradient(135deg, var(--green), #059669);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    
+    .stat-label {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+    
+    /* === SECTION === */
+    .section {
+      margin-bottom: 60px;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      letter-spacing: -.5px;
+      margin-bottom: 12px;
+    }
+    
+    .section-title .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* === HOW IT WORKS === */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    
+    .step {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px 28px;
+      position: relative;
+      backdrop-filter: blur(20px);
+      transition: all .3s ease;
+    }
+    
+    .step:hover {
+      border-color: var(--card-border-hover);
+      transform: translateY(-5px);
+    }
+    
+    .step-number {
+      position: absolute;
+      top: -16px;
+      left: 28px;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 8px 20px var(--accent-glow);
+    }
+    
+    .step-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    
+    .step h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .step p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    
+    /* === BENEFITS === */
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    
+    .benefit {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      gap: 20px;
+      backdrop-filter: blur(20px);
+      transition: all .3s ease;
+    }
+    
+    .benefit:hover {
+      border-color: var(--card-border-hover);
+      transform: translateX(5px);
+    }
+    
+    .benefit-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    
+    .benefit:nth-child(2) .benefit-icon { background: var(--green-light); }
+    .benefit:nth-child(3) .benefit-icon { background: var(--yellow-light); }
+    .benefit:nth-child(4) .benefit-icon { background: var(--accent-light); }
+    .benefit:nth-child(5) .benefit-icon { background: var(--green-light); }
+    .benefit:nth-child(6) .benefit-icon { background: var(--yellow-light); }
+    
+    .benefit h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .benefit p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* === FAQ === */
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color .3s ease;
+    }
+    
+    .faq-item:hover {
+      border-color: var(--card-border-hover);
+    }
+    
+    .faq-question {
+      width: 100%;
+      padding: 24px 28px;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-family: inherit;
+    }
+    
+    .faq-icon {
+      font-size: 20px;
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+      flex-shrink: 0;
+    }
+    
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+    }
+    
+    .faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .4s cubic-bezier(.4,0,.2,1);
+    }
+    
+    .faq-item.open .faq-answer {
+      grid-template-rows: 1fr;
+    }
+    
+    .faq-answer-inner {
+      overflow: hidden;
+    }
+    
+    .faq-answer-content {
+      padding: 0 28px 24px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    
+    /* === CTA SECTION === */
+    .cta-section {
+      background: linear-gradient(135deg, var(--accent-light), rgba(167,139,250,.15));
+      border: 1px solid rgba(var(--accent-rgb), .3);
+      border-radius: 32px;
+      padding: 60px 40px;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .cta-section h2 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    
+    .cta-section p {
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 500px;
+      margin: 0 auto 32px;
+    }
+    
+    /* === FOOTER === */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding-top: 40px;
+      text-align: center;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color .3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    
+    .footer-copy {
+      color: var(--muted);
+      font-size: 14px;
+      opacity: .7;
+    }
+    
+    /* === MOBILE === */
+    @media (max-width: 1024px) {
+      .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .benefits {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      
+      .topbar {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      
+      .top-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .pill {
+        padding: 10px 16px;
+        font-size: 13px;
+      }
+      
+      .hero { 
+        padding: 40px 16px 60px; 
+        margin-bottom: 40px; 
+      }
+      
+      .hero h1 {
+        font-size: 32px;
+      }
+      
+      .hero-subtitle {
+        font-size: 16px;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 24px;
+      }
+      
+      .stats-section { 
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px; 
+      }
+      
+      .stat-card { 
+        padding: 24px 16px; 
+      }
+      
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+      }
+      
+      .stat-value { 
+        font-size: 28px; 
+      }
+      
+      .stat-label {
+        font-size: 13px;
+      }
+      
+      .section-header {
+        margin-bottom: 32px;
+      }
+      
+      .section-title {
+        font-size: 26px;
+      }
+      
+      .section-subtitle {
+        font-size: 16px;
+      }
+      
+      .steps { 
+        grid-template-columns: 1fr;
+        gap: 32px; 
+      }
+      
+      .step { 
+        margin-top: 20px; 
+      }
+      
+      .benefits {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .benefit { 
+        flex-direction: column; 
+        gap: 16px;
+        padding: 24px;
+      }
+      
+      .benefit-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+      }
+      
+      .faq-question {
+        padding: 20px;
+        font-size: 15px;
+      }
+      
+      .faq-answer-content {
+        padding: 0 20px 20px;
+        font-size: 14px;
+      }
+      
+      .cta-section { 
+        padding: 40px 24px;
+        border-radius: 24px;
+      }
+      
+      .cta-section h2 {
+        font-size: 24px;
+      }
+      
+      .cta-section p {
+        font-size: 16px;
+      }
+      
+      .footer-links {
+        gap: 16px;
+      }
+      
+      .orb { display: none; }
+      
+      body::before {
+        animation: none;
+        background: radial-gradient(ellipse at 50% 0%, rgba(var(--accent-rgb), .2), transparent 60%);
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .brand-name {
+        display: none;
+      }
+      
+      .stat-value {
+        font-size: 24px;
+      }
+      
+      .stat-label {
+        font-size: 12px;
+      }
+      
+      .step h3 {
+        font-size: 18px;
+      }
+      
+      .step p {
+        font-size: 14px;
+      }
+    }
+    
+    @supports (-webkit-touch-callout: none) {
+      input, textarea, select {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="topbar">
+      <a class="brand" href="/">
+        <div class="logo">&lt;/&gt;</div>
+        <span class="brand-name">CodeNext</span>
+      </a>
+      <div class="top-actions">
+        <a href="/" class="pill">🏠 Главная</a>
+        <a id="authBtn" class="pill accent" href="/login">🚀 Войти</a>
+        <button id="themeBtn" class="theme-btn" type="button" aria-label="Переключить тему">🌙</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-badge">
+          <span>💎</span>
+          <span>Пожизненные выплаты с каждого клиента</span>
+        </div>
+        <h1>Зарабатывайте <span class="gradient">10% навсегда</span></h1>
+        <p class="hero-subtitle">Приглашайте друзей и получайте процент с каждой их покупки. Без ограничений по времени и сумме.</p>
+        <div class="hero-cta">
+          <a id="startBtn" class="btn btn-primary" href="/login">
+            <span>🚀</span>
+            <span>Начать зарабатывать</span>
+          </a>
+          <a class="btn btn-secondary" href="#how">
+            <span>📖</span>
+            <span>Как это работает</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="stats-section">
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">10%</div>
+          <div class="stat-label">с каждой покупки</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">♾️</div>
+          <div class="stat-value">Навсегда</div>
+          <div class="stat-label">пожизненные выплаты</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value">500₽</div>
+          <div class="stat-label">минимум для вывода</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-value">24ч</div>
+          <div class="stat-label">быстрые выплаты</div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section class="section" id="how">
+        <div class="section-header">
+          <h2 class="section-title">Как <span class="gradient">это работает</span></h2>
+          <p class="section-subtitle">Всего 4 простых шага до первого заработка</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <span class="step-icon">📝</span>
+            <h3>Зарегистрируйтесь</h3>
+            <p>Создайте аккаунт за 30 секунд и получите уникальную реферальную ссылку в личном кабинете.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <span class="step-icon">📤</span>
+            <h3>Делитесь ссылкой</h3>
+            <p>Отправляйте ссылку друзьям, публикуйте в соцсетях, блогах, каналах — где угодно.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <span class="step-icon">💸</span>
+            <h3>Получайте 10%</h3>
+            <p>Когда ваш реферал делает покупку — 10% от суммы заказа автоматически начисляется вам на баланс.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <span class="step-icon">🏦</span>
+            <h3>Выводите деньги</h3>
+            <p>Выводите заработанное на карту, СБП или криптокошелёк. Минималка — всего 500₽.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benefits -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Почему <span class="gradient">выбирают нас</span></h2>
+          <p class="section-subtitle">Преимущества партнёрской программы CodeNext</p>
+        </div>
+        <div class="benefits">
+          <div class="benefit">
+            <div class="benefit-icon">♾️</div>
+            <div>
+              <h3>Пожизненные выплаты</h3>
+              <p>Получайте процент с каждой покупки реферала навсегда, без ограничений по времени.</p>
+            </div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">📈</div>
+            <div>
+              <h3>Высокая конверсия</h3>
+              <p>Наши продукты востребованы — конверсия в покупку значительно выше среднего по рынку.</p>
+            </div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">📊</div>
+            <div>
+              <h3>Прозрачная статистика</h3>
+              <p>Отслеживайте всех рефералов, их покупки и ваш заработок в реальном времени.</p>
+            </div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">⚡</div>
+            <div>
+              <h3>Быстрые выплаты</h3>
+              <p>Выводите деньги когда угодно. Обработка заявок — до 24 часов.</p>
+            </div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">💳</div>
+            <div>
+              <h3>Удобные способы вывода</h3>
+              <p>Карты любых банков, СБП, криптовалюта — выбирайте что удобно.</p>
+            </div>
+          </div>
+          <div class="benefit">
+            <div class="benefit-icon">🤝</div>
+            <div>
+              <h3>Поддержка партнёров</h3>
+              <p>Помогаем с продвижением, отвечаем на вопросы и делимся лучшими практиками.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">Частые <span class="gradient">вопросы</span></h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Как получить реферальную ссылку?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <div class="faq-answer-content">
+                  Зарегистрируйтесь на сайте и войдите в личный кабинет. Ваша уникальная реферальная ссылка будет доступна в разделе «Профиль». Просто скопируйте её и делитесь!
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Как начисляются выплаты?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <div class="faq-answer-content">
+                  Когда пользователь переходит по вашей ссылке и совершает покупку, 10% от суммы заказа автоматически начисляется на ваш баланс. Это происходит после подтверждения оплаты.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Есть ли ограничения по сумме заработка?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <div class="faq-answer-content">
+                  Нет! Вы можете зарабатывать неограниченно. Чем больше рефералов приведёте и чем активнее они покупают — тем больше ваш доход. Без потолков и лимитов.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Как долго действует привязка реферала?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <div class="faq-answer-content">
+                  Навсегда! Если пользователь зарегистрировался по вашей ссылке, вы будете получать 10% со всех его покупок без ограничения по времени.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Какая минимальная сумма для вывода?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <div class="faq-answer-content">
+                  Минимальная сумма для вывода — 500₽. Вы можете вывести деньги на банковскую карту, через СБП или на криптокошелёк. Заявки обрабатываются в течение 24 часов.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-section">
+        <h2>Готовы начать зарабатывать? 🚀</h2>
+        <p>Присоединяйтесь к партнёрской программе прямо сейчас и получайте пассивный доход</p>
+        <a id="ctaBtn" class="btn btn-primary" href="/login">
+          <span>💰</span>
+          <span>Стать партнёром</span>
+        </a>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a href="/">Главная</a>
+        <a href="/login">Личный кабинет</a>
+        <a href="https://t.me/CodeNext_support" target="_blank" rel="noopener">Поддержка</a>
+      </div>
+      <p class="footer-copy">© 2025 CodeNext. Все права защищены.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme init
+    (function() {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'light' || (!saved && !matchMedia('(prefers-color-scheme:dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+
+    // Referral code
+    (function() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const ref = (params.get('ref') || '').trim().toUpperCase();
+        if (!ref || !/^[A-Z0-9_-]{4,40}$/.test(ref)) return;
+        if (document.cookie.includes('referral_code=')) return;
+        document.cookie = 'referral_code=' + encodeURIComponent(ref) + '; Max-Age=2592000; Path=/; SameSite=Lax';
+      } catch (e) {}
+    })();
+
+    // Auth check
+    const hasToken = !!localStorage.getItem('cabinet_token');
+    const authBtn = document.getElementById('authBtn');
+    const startBtn = document.getElementById('startBtn');
+    const ctaBtn = document.getElementById('ctaBtn');
+    
+    if (hasToken) {
+      authBtn.textContent = '👤 Кабинет';
+      authBtn.href = '/cabinet';
+      startBtn.href = '/cabinet';
+      ctaBtn.href = '/cabinet';
+    }
+
+    // Theme toggle
+    const themeBtn = document.getElementById('themeBtn');
+    function updateThemeIcon() {
+      themeBtn.textContent = document.documentElement.getAttribute('data-theme') === 'light' ? '☀️' : '🌙';
+    }
+    updateThemeIcon();
+    
+    themeBtn.addEventListener('click', () => {
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+      updateThemeIcon();
+    });
+
+    // FAQ
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Проверка статуса оплаты — CodeNext</title>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM4MThjZjgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNhNzhiZmEiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCBmaWxsPSJ1cmwoI2cpIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjY4IiBmb250LXNpemU9IjUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC13ZWlnaHQ9ImJvbGQiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+
+  <script>
+    (function(){
+      const saved = localStorage.getItem('theme');
+      const sys = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if(saved === 'light' || (!saved && sys)){
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+      src: local('Inter'), local('Inter-Regular');
+      size-adjust: 100%;
+      ascent-override: 90%;
+    }
+
+    :root {
+      --bg: #050508;
+      --card: rgba(255,255,255,0.04);
+      --card-hover: rgba(255,255,255,0.08);
+      --card-border: rgba(255,255,255,0.1);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.6);
+      --accent: #818cf8;
+      --accent2: #a78bfa;
+      --accent-rgb: 129,140,248;
+      --accent-glow: rgba(129,140,248,0.5);
+      --green: #34d399;
+      --green-rgb: 52,211,153;
+      --green-glow: rgba(52,211,153,0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --card: rgba(255,255,255,0.9);
+      --card-border: rgba(0,0,0,0.1);
+      --text: #1a1a1a;
+      --muted: #555555;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent-rgb: 99,102,241;
+      --accent-glow: rgba(99,102,241,0.4);
+      --green: #059669;
+      --green-rgb: 5,150,105;
+      --green-glow: rgba(5,150,105,0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.5s ease, color 0.3s ease;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(var(--accent-rgb), 0.3), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 90% 50%, rgba(var(--accent-rgb), 0.15), transparent 50%),
+        radial-gradient(ellipse 80% 60% at 10% 80%, rgba(var(--green-rgb), 0.1), transparent 50%);
+      animation: bgPulse 10s ease-in-out infinite alternate;
+    }
+
+    [data-theme="light"] body::before { opacity: 0.5; }
+
+    @keyframes bgPulse {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      animation: orbFloat 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .orb-1 { width: 500px; height: 500px; background: rgba(var(--accent-rgb), 0.15); top: -150px; left: -150px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(var(--accent-rgb), 0.1); bottom: -100px; right: -100px; animation-delay: -5s; }
+
+    [data-theme="light"] .orb { opacity: 0.4; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-20px, 50px) scale(0.95); }
+    }
+
+    .particles { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(var(--accent-rgb), 0.6);
+      border-radius: 50%;
+      animation: particleFloat 20s linear infinite;
+    }
+
+    [data-theme="light"] .particle { opacity: 0.5; }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(100vh); opacity: 0; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      padding: 56px 48px;
+      border-radius: 32px;
+      text-align: center;
+      max-width: 540px;
+      width: 90%;
+      transition: all 0.4s ease;
+      animation: fadeUp 0.6s ease;
+    }
+
+    [data-theme="light"] .card { background: #fff; box-shadow: 0 4px 30px rgba(0,0,0,0.08); }
+    .card:hover { border-color: var(--accent); box-shadow: 0 40px 80px rgba(0,0,0,0.2); }
+
+    h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    p { color: var(--muted); margin-bottom: 32px; font-size: 18px; line-height: 1.7; }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(var(--accent-rgb), 0.15);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 28px;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .icon { font-size: 80px; margin-bottom: 24px; display: inline-block; animation: iconPulse 2s ease-in-out infinite; }
+    @keyframes iconPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    .success-icon { filter: drop-shadow(0 0 40px var(--green-glow)); }
+
+    .btn {
+      display: inline-block;
+      padding: 18px 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      text-decoration: none;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 40px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover::before { left: 100%; }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 20px 60px var(--accent-glow); }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary { background: var(--card); border: 1px solid var(--card-border); color: var(--text); box-shadow: none; }
+    [data-theme="light"] .btn-secondary { background: #f8f8fc; }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .btn-secondary::before { display: none; }
+
+    .btn-row { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+
+    .order-id-box {
+      background: rgba(var(--accent-rgb), 0.1);
+      border: 1px solid rgba(var(--accent-rgb), 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .order-id-box strong { color: var(--text); display: block; margin-bottom: 8px; }
+    .order-id-box code {
+      background: rgba(255,255,255,0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 12px;
+      user-select: all;
+    }
+
+    [data-theme="light"] .order-id-box code { background: rgba(0,0,0,0.05); }
+
+    .attempt-counter { font-size: 14px; color: var(--muted); margin-top: 16px; }
+
+    .hidden { display: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress-dots { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: rgba(var(--accent-rgb), 0.3);
+      border-radius: 50%;
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); background: rgba(var(--accent-rgb), 0.3); }
+      50% { transform: scale(1.5); background: var(--accent); }
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 40px 28px; width: 95%; }
+      h1 { font-size: 24px; }
+      p { font-size: 16px; }
+      .icon { font-size: 64px; }
+      .btn { width: 100%; }
+      .orb, .particles { display: none !important; }
+      body::before { animation: none !important; background-attachment: scroll; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="card">
+    <div id="loading">
+      <div class="spinner"></div>
+      <h1>Проверяем оплату</h1>
+      <p>Пожалуйста, подождите. Это займёт несколько секунд.</p>
+      <div class="progress-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="attempt-counter" id="attemptCounter"></div>
+      <div class="order-id-box hidden" id="orderIdLoading"></div>
+    </div>
+
+    <div id="success" class="hidden">
+      <div class="icon success-icon">✅</div>
+      <h1>Оплата прошла успешно!</h1>
+      <p>Ваша подписка готова к оформлению.</p>
+      <a id="activateLink" href="#" class="btn">Оформить подписку →</a>
+    </div>
+
+    <div id="waiting" class="hidden">
+      <div class="icon">⏳</div>
+      <h1>Платёж обрабатывается</h1>
+      <p>Банк подтвердил оплату. Попробуйте проверить статус вручную.</p>
+      <div class="btn-row">
+        <button id="fallbackBtnWaiting" class="btn" onclick="runFallback(this)">🔄 Проверить статус</button>
+        <a href="https://t.me/CodeNext_support" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">💬 Написать в поддержку</a>
+      </div>
+      <div class="order-id-box hidden" id="orderIdWaiting"></div>
+    </div>
+
+    <div id="error" class="hidden">
+      <div class="icon">⚠️</div>
+      <h1>Оплата не найдена</h1>
+      <p>Мы пока не получили подтверждение. Возможно, банк задерживает перевод.</p>
+      <div class="btn-row">
+        <button id="fallbackBtnError" class="btn" onclick="runFallback(this)">🔄 Проверить ещё раз</button>
+        <a href="https://t.me/CodeNext_support" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">💬 Написать в поддержку</a>
+      </div>
+      <div class="order-id-box hidden" id="orderIdError"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) { return; }
+          }
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+        })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+        ym(107005723, 'init', {
+          clickmap:true,
+          trackLinks:true,
+          accurateTrackBounce:true,
+          webvisor:true
+        });
+      }, 3000);
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/107005723" style="position:absolute; left:-9999px;" alt=""/></div></noscript>
+
+  <script>
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) {
+      const particlesEl = document.getElementById('particles');
+      for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDelay = Math.random() * 20 + 's';
+        p.style.animationDuration = (15 + Math.random() * 15) + 's';
+        p.style.width = (2 + Math.random() * 3) + 'px';
+        p.style.height = p.style.width;
+        particlesEl.appendChild(p);
+      }
+    }
+
+        const urlParams = new URLSearchParams(window.location.search);
+    let orderId = (urlParams.get('InvId') || urlParams.get('order_id') || '').trim();
+
+    if (!orderId) {
+      orderId = localStorage.getItem('last_order_id') || '';
+      if (orderId) console.log('Order ID from localStorage:', orderId);
+    }
+
+    let attempts = 0;
+    const maxAttempts = 60;
+    let checkTimeout = null;
+    let waitingInterval = null;
+    let stopped = false;
+
+    function stopPolling() {
+      stopped = true;
+      if (checkTimeout) {
+        clearTimeout(checkTimeout);
+        checkTimeout = null;
+      }
+      if (waitingInterval) {
+        clearInterval(waitingInterval);
+        waitingInterval = null;
+      }
+    }
+
+    function isValidOrderId(value) {
+      return /^[0-9a-fA-F-]{36}$/.test(value);
+    }
+
+    function setOrderBox(elId, value) {
+      const el = document.getElementById(elId);
+      if (!el || !value) return;
+
+      el.innerHTML = '';
+      el.classList.remove('hidden');
+
+      const strong = document.createElement('strong');
+      strong.textContent = 'Номер заказа:';
+
+      const code = document.createElement('code');
+      code.textContent = value;
+
+      el.appendChild(strong);
+      el.appendChild(code);
+    }
+
+    function showOrderId() {
+      setOrderBox('orderIdLoading', orderId);
+      setOrderBox('orderIdWaiting', orderId);
+      setOrderBox('orderIdError', orderId);
+    }
+
+    function hideAll() {
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('waiting').classList.add('hidden');
+      document.getElementById('error').classList.add('hidden');
+      document.getElementById('success').classList.add('hidden');
+    }
+
+    function showSuccess(link) {
+      stopPolling();
+      hideAll();
+      document.getElementById('success').classList.remove('hidden');
+      document.getElementById('activateLink').href = link;
+
+      if (typeof ym !== 'undefined') {
+        ym(107005723, 'reachGoal', 'payment_success', { order_id: orderId });
+      }
+    }
+
+    function showWaiting() {
+      hideAll();
+      stopPolling();
+      document.getElementById('waiting').classList.remove('hidden');
+
+      stopped = false;
+      let extraAttempts = 0;
+      waitingInterval = setInterval(async () => {
+        extraAttempts++;
+        if (extraAttempts > 20) {
+          clearInterval(waitingInterval);
+          waitingInterval = null;
+          return;
+        }
+
+        try {
+          const res = await fetchJsonNoCache(`/api/check-order/${encodeURIComponent(orderId)}`);
+          if (!res.ok) return;
+          const data = await res.json().catch(() => ({}));
+          if (data.status === 'paid' && data.link) {
+            clearInterval(waitingInterval);
+            waitingInterval = null;
+            showSuccess(data.link);
+          }
+        } catch (e) {
+          console.warn('waiting interval check error:', e);
+        }
+      }, 30000);
+    }
+
+    function showError() {
+      stopPolling();
+      hideAll();
+      document.getElementById('error').classList.remove('hidden');
+    }
+
+    async function fetchJsonNoCache(url) {
+      const res = await fetch(`${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}`, {
+        method: 'GET',
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+
+      return res;
+    }
+
+    async function checkStatus() {
+      if (stopped) return;
+      attempts++;
+
+      const counter = document.getElementById('attemptCounter');
+      counter.textContent = `Проверка ${attempts}/${maxAttempts}...`;
+
+      try {
+        const res = await fetchJsonNoCache(`/api/check-order/${encodeURIComponent(orderId)}`);
+
+        if (res.status === 404 || res.status === 400) {
+          showError();
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (data.status === 'paid' && data.link) {
+          showSuccess(data.link);
+          return;
+        }
+
+        if (attempts >= maxAttempts) {
+          showWaiting();
+          return;
+        }
+
+        const delay = attempts < 30 ? 2000 : 4000;
+        checkTimeout = setTimeout(checkStatus, delay);
+      } catch (e) {
+        console.error('checkStatus error:', e);
+
+        if (attempts >= maxAttempts) {
+          showWaiting();
+        } else {
+          const delay = attempts < 30 ? 2000 : 4000;
+          checkTimeout = setTimeout(checkStatus, delay);
+        }
+      }
+    }
+
+    async function runFallback(btn) {
+      stopPolling();
+
+      if (!orderId || !isValidOrderId(orderId)) {
+        showError();
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.dataset.oldText = btn.textContent;
+        btn.textContent = '⏳ Проверяем...';
+      }
+
+      try {
+        const res = await fetchJsonNoCache(`/api/fallback-check/${encodeURIComponent(orderId)}`);
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+
+        if (data.status === 'paid' && data.link) {
+          showSuccess(data.link);
+          return;
+        }
+
+        if (data.status === 'cooldown') {
+          alert('Подождите 10 секунд и попробуйте снова');
+          return;
+        }
+
+        if (data.status === 'pending' || data.status === 'created') {
+          showWaiting();
+          return;
+        }
+
+        showError();
+      } catch (e) {
+        console.error('runFallback error:', e);
+        showError();
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.oldText || '🔄 Проверить статус';
+        }
+      }
+    }
+
+    if (!orderId || !isValidOrderId(orderId)) {
+      showError();
+    } else {
+      showOrderId();
+      // Даём webhook время дойти до сервера после редиректа
+      checkTimeout = setTimeout(checkStatus, 3000);
+    }
+  </script>
+</body>
+</html>

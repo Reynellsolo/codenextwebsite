@@ -1559,6 +1559,11 @@
         </article>
       </section>
 
+      <div class="payment-methods">
+        <div class="payment-method"><span class="pm-icon">📱</span> СБП</div>
+        <div class="payment-method"><span class="pm-icon">💳</span> Карта</div>
+      </div>
+
       <!-- ===== МОБИЛЬНЫЙ АККОРДЕОН ===== -->
       <div class="mobile-accordion" id="mobileAccordion" role="list">
 
@@ -2476,7 +2481,8 @@
   const accordion = document.getElementById('mobileAccordion');
   if (!accordion) return;
   
-  const lastItem = accordion.querySelector('.accordion-item:last-of-type');
+  const items = accordion.querySelectorAll('.accordion-item');
+const lastItem = items.length ? items[items.length - 1] : null;
   if (!lastItem) return;
   
   const lastItemRect = lastItem.getBoundingClientRect();

@@ -697,7 +697,11 @@
       animation:btnSpin .8s linear infinite;display:none
     }
     .btn.loading .btn-spinner{display:block}
-    .btn.loading .btn-text{opacity:.7}
+.btn.loading .btn-text{opacity:.7}
+.accordion-quick-buy.loading .btn-spinner,
+.accordion-btn.loading .btn-spinner{display:block}
+.accordion-quick-buy.loading .btn-text,
+.accordion-btn.loading .btn-text{opacity:.7}
     @keyframes btnSpin{to{transform:rotate(360deg)}}
 
     .plan .btn{
@@ -1097,7 +1101,7 @@
       display:flex;align-items:center;justify-content:center;gap:6px;
       margin-top:16px;font-size:12px;color:var(--muted)
     }
-    .modal-security svg{width:14px;height:14px;stroke:var(--green);stroke-width:2}
+    .modal-security svg{width:14px;height:14px;stroke:var(--green);stroke-width:2;fill:none}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
     @keyframes heroFadeUp{from{opacity:1;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -1168,6 +1172,7 @@
 }
       .plans,.plans-bottom{display:none !important}
       .container > .payment-methods{display:none}
+      main > .payment-methods{display:none}
       .mobile-accordion{display:flex}
       .sticky-cta{display:block;opacity:0;visibility:hidden}
       .section{padding:28px 20px;border-radius:20px}

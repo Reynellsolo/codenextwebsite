@@ -798,8 +798,10 @@
     .accordion-details-btn:hover{background:rgba(var(--plan-rgb),.15);border-color:rgba(var(--plan-rgb),.3)}
     .accordion-details-btn:focus-visible{outline:2px solid var(--plan-main);outline-offset:2px}
 
-    .accordion-content{max-height:0;overflow:hidden;transition:max-height .35s ease-out;will-change:max-height}
-.accordion-item.open .accordion-content{max-height:500px;transition:max-height .4s ease-in}
+    .accordion-content{max-height:0;overflow:hidden}
+.accordion-item.open .accordion-content{max-height:none}
+.accordion-body{opacity:0;transform:translateY(-8px);transition:opacity .2s ease,transform .2s ease}
+.accordion-item.open .accordion-body{opacity:1;transform:translateY(0);transition:opacity .25s ease .05s,transform .25s ease .05s}
 
     .accordion-body{padding:0 16px 16px;border-top:1px solid rgba(var(--plan-rgb),.15)}
     .accordion-subtitle{font-size:14px;color:var(--muted);line-height:1.5;margin:14px 0}
@@ -2426,14 +2428,38 @@
       document.querySelectorAll('.accordion-item.open').forEach(function(item) {
         if (item !== el) {
           item.classList.remove('open');
-          const header = item.querySelector('.accordion-header');
-          if (header) header.setAttribute('aria-expanded', 'false');
+          var c = item.querySelector('.accordion-content');
+          if (c) c.style.maxHeight = '0';
+          var h = item.querySelector('.accordion-header');
+          if (h) h.setAttribute('aria-expanded', 'false');
         }
       });
       
-      // Toggle current
-      el.classList.toggle('open');
-      const header = el.querySelector('.accordion-header');
+      var content = el.querySelector('.accordion-content');
+      
+      if (wasOpen) {
+        // Closing — set exact height first, then collapse
+        if (content) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          content.offsetHeight; // force reflow
+          content.style.maxHeight = '0';
+        }
+        el.classList.remove('open');
+      } else {
+        // Opening — expand to exact height
+        el.classList.add('open');
+        if (content) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+          content.addEventListener('transitionend', function handler() {
+            if (el.classList.contains('open')) {
+              content.style.maxHeight = '500px';
+            }
+            content.removeEventListener('transitionend', handler);
+          });
+        }
+      }
+      
+      var header = el.querySelector('.accordion-header');
       if (header) {
         header.setAttribute('aria-expanded', el.classList.contains('open') ? 'true' : 'false');
       }

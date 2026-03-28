@@ -417,7 +417,7 @@
   border:1px solid rgba(var(--green-rgb),.3);border-radius:24px;padding:32px 40px;
   margin-bottom:32px;transition:all .4s ease;
   box-shadow:0 0 60px rgba(var(--green-rgb),.2),0 0 120px rgba(var(--green-rgb),.1);
-  max-width:100%;width:100%
+  box-sizing:border-box;width:100%
 }
     [data-theme="light"] .guarantee{background:#fff;box-shadow:0 0 40px rgba(var(--green-rgb),.12),0 4px 30px rgba(0,0,0,0.08)}
     .guarantee:hover{
@@ -440,7 +440,7 @@
   background:var(--card);border:1px solid var(--card-border);
   border-radius:20px;font-size:16px;color:var(--text-secondary);line-height:1.8;
   transition:all .3s ease;
-  max-width:100%;width:100%
+  box-sizing:border-box;width:100%
 }
     [data-theme="light"] .plans-guide{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
     .plans-guide strong{color:var(--text);font-weight:700}
@@ -503,11 +503,11 @@
     }
 
     /* ===== ТАРИФЫ (ДЕСКТОП) ===== */
-    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+    .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-bottom:24px}
     .plans-bottom{
-      display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));
-      gap:24px;max-width:860px;margin:0 auto 24px
-    }
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;max-width:860px;margin:0 auto 24px
+}
 
     .plan{
       --plan-main:var(--accent);--plan-rgb:var(--accent-rgb);--plan-secondary:var(--accent2);
